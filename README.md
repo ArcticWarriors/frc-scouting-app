@@ -5,6 +5,8 @@ Web Application for FRC Scouting
 
 * Install [NodeJS and npm](https://nodejs.org/en/download/)
 * Open a command prompt/terminal, cd into frc-scouting-app, and run `npm install` to install the dependancies
+* Once started, the server will be available on either localhost or your external IP on port 3000 - use the HOST and PORT
+environment variables to bind to a different host or port
 
 ### For development
 * To use the loobback CLI to help you create models when developing the server, run `npm install -g loopback-cli`

@@ -1,7 +1,7 @@
 {
-  "name": "frc-scouting-app-client",
+  "name": "frc-scouting-app",
   "version": "0.1.0",
-  "description": "FRC scouting web application client",
+  "description": "FRC scouting web application",
   "main": "server/index.js",
   "scripts": {
     "start": "node .",
