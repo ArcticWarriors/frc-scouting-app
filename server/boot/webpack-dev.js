@@ -7,7 +7,7 @@ module.exports = function(server) {
         var webpack = require('webpack');
         var webpackDevMiddleware = require('webpack-dev-middleware');
         var webpackHotMiddleware = require('webpack-hot-middleware');
-        const webpackConfig = require('../../client/webpack.config.js')({target: 'development'});
+        const webpackConfig = require('../../client/config/webpack.dev.conf.js');
         var compiler = webpack(webpackConfig);
         
         server.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));  
