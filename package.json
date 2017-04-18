@@ -7,7 +7,7 @@
     "start": "node .",
     "build:dev": "webpack --config client/config/webpack.dev.conf.js --progress --profile --colors",
     "build:prod": "webpack --config client/config/webpack.prod.conf.js --progress --profile --colors",
-    "heroku-postbuild": "if [ \"$NODE_ENV\" == \"production\" ]; then npm build:prod; fi"
+    "heroku-postbuild": "if [ \"$NODE_ENV\" = \"production\" ]; then npm build:prod; fi"
   },
   "dependencies": {
     "body-parser": "^1.17.1",
