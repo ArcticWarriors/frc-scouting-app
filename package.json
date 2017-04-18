@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "body-parser": "^1.17.1",
+    "bootstrap": "^3.3.7",
     "compression": "^1.6.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.3",
     "debug": "^2.6.3",
     "helmet": "^3.5.0",
+    "jquery": "^3.2.1",
     "loopback": "^3.6.0",
     "loopback-boot": "^2.24.0",
     "loopback-component-explorer": "^4.2.0",
