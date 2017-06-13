@@ -1,4 +1,5 @@
 var path = require('path');
+const webpack = require('webpack')
 
 const baseConfig = module.exports = {
     context: path.resolve(__dirname, '../'),
@@ -13,8 +14,9 @@ const baseConfig = module.exports = {
         extensions: ['.js', '.vue', '.json'],
         alias: {
             'vue$': 'vue/dist/vue.esm.js',
-            '@': path.resolve(__dirname, '../src')
-        }
+            '@': path.resolve(__dirname, '../src'),
+        },
+        modules: [path.resolve(__dirname, "../../node_modules")]
     },
     module: {
         rules: [{
@@ -36,5 +38,12 @@ const baseConfig = module.exports = {
                 name: 'static/fonts/[name].[hash:7].[ext]'
             }
         }]
-    }
+    },
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            Tether: 'tether'
+        }),
+    ]
 };
