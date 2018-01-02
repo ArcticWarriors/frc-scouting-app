@@ -32,12 +32,13 @@
 
 <script>
   import NavItem from '@/components/NavItem';
+
   export default {
     data: () => ({
-      mini: null
+      mini: null,
     }),
     components: {
       NavItem,
     },
-  }
+  };
 </script>

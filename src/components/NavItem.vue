@@ -14,7 +14,7 @@
     data: {},
     props: {
       icon: String,
-      title: string
-    }
-  }
+      title: String,
+    },
+  };
 </script>
