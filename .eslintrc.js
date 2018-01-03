@@ -1,39 +1,46 @@
-// https://eslint.org/docs/user-guide/configuring
+// http://eslint.org/docs/user-guide/configuring
 
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
-  parserOptions: {
-    sourceType: 'module'
-  },
-  env: {
-    browser: true,
-  },
-  extends: 'airbnb-base',
-  // required to lint *.vue files
-  plugins: [
-    'html'
+  extends: [
+      'airbnb-base',
+      'plugin:vue/recommended',
   ],
-  // check if imports actually resolve
-  settings: {
+  parserOptions: {
+     parser: 'babel-eslint',
+     ecmaVersion: 2017,
+     sourceType: 'module'
+  },
+  // Check if imports actually resolve
+  'settings': {
     'import/resolver': {
-      webpack: {
-        config: 'build/webpack.base.conf.js'
+      'webpack': {
+        'config': 'build/webpack.base.conf.js'
       }
     }
   },
-  // add your custom rules here
-  rules: {
-    // don't require .vue extension when importing
+  'rules': {
+    // Don't require .vue extension when importing
     'import/extensions': ['error', 'always', {
-      js: 'never',
-      vue: 'never'
+      'js': 'never',
+      'vue': 'never'
     }],
-    // allow optionalDependencies
+    // Allow optionalDependencies
     'import/no-extraneous-dependencies': ['error', {
-      optionalDependencies: ['test/unit/index.js']
+      'optionalDependencies': ['test/unit/index.js']
     }],
-    // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    // Allow debugger during development
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    // Allow trailing spaces in development (many IDEs add them, so this causes nagging with the dev server)
+    'no-trailing-spaces': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    // Allow four attributes per line
+    "vue/max-attributes-per-line": ['error', {
+      "singleline": 4,
+      "multiline": {
+        "max": 4,
+        "allowFirstLine": false
+      }
+    }]
+
   }
 }

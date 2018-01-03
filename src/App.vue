@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-      <Navigation></Navigation>
+      <Navigation/>
       <router-view/>
     </v-app>
   </div>
@@ -11,7 +11,7 @@
 import Navigation from '@/components/Navigation';
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     Navigation,
   },

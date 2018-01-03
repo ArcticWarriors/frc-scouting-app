@@ -1,44 +1,51 @@
 <template>
+  <div>
     <v-navigation-drawer
       clipped
       fixed
-      mini-variant.sync="mini"
+      :mini-variant="mini"
       app
     >
       <v-list dense>
-        <router-link to="dashboard" tag="NavItem" icon="dashboard" title="Dashboard"></router-link>
-        <router-link to="matches" tag="NavItem" icon="" title="Matches"></router-link>
-        <router-link to="rankings" tag="NavItem" icon="" title="Rankings"></router-link>
-        
-        <router-link to="bulk-match-scout" tag="NavItem" icon="" title="Bulk Match Scouting Entry"></router-link>
-        <router-link to="bulk-team-scout" tag="NavItem" icon="" title="Bulk Team Scouting Entry"></router-link>
-        <router-link to="pick-list" tag="NavItem" icon="" title="Pick List"></router-link>
-        <router-link to="team-admin" tag="NavItem" icon="" title="Team Administration"></router-link>
-        
-        <router-link to="competitions" tag="NavItem" icon="" title="Competitions"></router-link>
-        <router-link to="teams" tag="NavItem" icon="" title="All Teams"></router-link>
-        
-        <router-link to="site-admin" tag="NavItem" icon="" title="Site Administration"></router-link>
-        <router-link to="login" tag="NavItem" icon="" title="Login"></router-link>
-        <router-link to="account" tag="NavItem" icon="" title="Account"></router-link>
-        <router-link to="logout" tag="NavItem" icon="" title="Logout"></router-link>
+        <v-list-tile v-for="navItem of navItems" :to="navItem.to" :key="navItem.title" router>
+          <v-list-tile-action>
+            <v-icon>{{ navItem.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ navItem.title }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar app fixed clipped-left>
-      <v-toolbar-side-icon @click.stop="mini = !mini"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="mini = !mini"/>
       <v-toolbar-title>FRC Scouting</v-toolbar-title>
     </v-toolbar>
+  </div>
 </template>
 
 <script>
-  import NavItem from '@/components/NavItem';
-
   export default {
     data: () => ({
-      mini: null,
+      mini: false,
+      navItems: [
+        { to: 'dashboard', icon: 'dashboard', title: 'Dashboard' },
+        { to: 'matches', icon: '', title: 'Matches' },
+        { to: 'rankings', icon: '', title: 'Rankings' },
+        
+        { to: 'bulk-match-scout', icon: '', title: 'Bulk Match Scouting Entry' },
+        { to: 'bulk-team-scout', icon: '', title: 'Bulk Team Scouting Entry' },
+        { to: 'pick-list', icon: '', title: 'Pick List' },
+        { to: 'team-admin', icon: '', title: 'Team Administration' },
+        
+        { to: 'competitions', icon: '', title: 'Competitions' },
+        { to: 'teams', icon: '', title: 'All Teams' },
+        
+        { to: 'site-admin', icon: '', title: 'Site Administration' },
+        { to: 'login', icon: '', title: 'Login' },
+        { to: 'account', icon: '', title: 'Account' },
+        { to: 'logout', icon: '', title: 'Logout' },
+      ],
     }),
-    components: {
-      NavItem,
-    },
   };
 </script>
