@@ -3,7 +3,9 @@
     <v-navigation-drawer
       clipped
       fixed
-      :mini-variant="mini"
+      :mini-variant.sync="mini"
+      stateless
+      permanent
       app
     >
       <v-list dense>
