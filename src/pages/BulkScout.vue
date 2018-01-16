@@ -1,12 +1,12 @@
 <template>
   <div>
-    <P> TEAMS BULK ENTRY </P>
+    <P> BULK SCOUTING ENTRY </P>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'BulkTeamEntry',
+  name: 'BulkScout',
   data() {
     return {};
   },
