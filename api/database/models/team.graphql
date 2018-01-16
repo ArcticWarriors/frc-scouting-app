@@ -1,0 +1,33 @@
+type TeamField {
+  id: ID! @unique
+  name: String!
+  type: String!
+  # Did this come from the API?
+  official: Boolean!
+  # If not set, this is a public field
+  owner: ScoutTeam
+  submitter: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TeamData {
+  id: ID! @unique
+  team: Team!
+  field: TeamField!
+  value: String!
+  # Required as the field could be public, but the data is still associated with a specific team 
+  owner: ScoutTeam!
+  submitter: User!
+  private: Boolean
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Team {
+  number: Int! @unique
+  competitions: [Competition!]!
+  matches: [MatchPlacement!]!
+  teamData: [TeamData!]!
+  matchData: [MatchData!]!
+}

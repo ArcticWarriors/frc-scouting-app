@@ -1,0 +1,55 @@
+type User {
+  id: ID! @unique
+  email: String! @unique
+  password: String!
+  name: String!
+  scoutTeam: ScoutTeam
+  roles: [Role!]!
+}
+
+enum Role {
+  SCOUTMASTER,
+  DRIVE_TEAM,
+  ANALYST,
+  DATA_ENTRY,
+  PIT_SCOUT,
+  MATCH_SCOUT,
+  TEAM_MEMBER
+}
+
+type ScoutTeam {
+  id: ID! @unique
+  affiliation: Team
+  teamFields: [TeamField!]!
+  teamData: [TeamData!]!
+  matchFields: [MatchField!]!
+  matchData: [MatchData!]!
+  members: [User!]!
+}
+
+type Bookmark {
+  id: ID! @unique
+  submitter: User!
+  team: Team!
+  grouping: String!
+}
+
+type Image {
+  id: ID! @unique
+  path: String!
+  name: String!
+  submitter: User!
+  owner: ScoutTeam!
+  private: Boolean
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Pick {
+  id: ID! @unique
+  competition: Competition!
+  team: Team!
+  grouping: String!
+  rank: Int
+  owner: ScoutTeam!
+}
