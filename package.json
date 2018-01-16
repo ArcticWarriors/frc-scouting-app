@@ -1,7 +1,7 @@
 {
   "name": "frc-scouting-app",
   "version": "1.0.0",
-  "description": "Vue.js/Loopback FRC Scouting Application",
+  "description": "Vue.js/Prisma FRC Scouting Application",
   "author": "ProgBot <ProgBot@users.noreply.github.com>",
   "private": true,
   "scripts": {

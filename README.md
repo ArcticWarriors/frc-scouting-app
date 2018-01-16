@@ -1,6 +1,6 @@
 # frc-scouting-app
 
-> Vue.js/Loopback FRC Scouting Application
+> Vue.js/Prisma FRC Scouting Application
 
 ## Build Setup
 
