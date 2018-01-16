@@ -1,4 +1,4 @@
-# import Role from "./generated/graphcool.graphql"
+# import Role from "./generated/prisma.graphql"
 
 type Query {
   me: User
