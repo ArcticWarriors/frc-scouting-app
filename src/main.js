@@ -4,10 +4,10 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 // Apollo
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import VueApollo from 'vue-apollo'
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import VueApollo from 'vue-apollo';
 // Our app
 import App from './App';
 import router from './router';
@@ -30,9 +30,14 @@ const apolloClient = new ApolloClient({
 Vue.use(VueApollo);
 Vue.use(Vuetify);
 
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+});
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  apolloProvider,
   render: h => h(App),
 });

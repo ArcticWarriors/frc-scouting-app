@@ -14,7 +14,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
     "build": "node build/build.js",
     "prisma": "node api/node_modules/prisma-cli/dist/index.js",
-    "postinstall": "npm install --prefix api"
+    "postinstall": "cd api && npm install"
   },
   "dependencies": {
     "font-awesome": "git+https://github.com/FortAwesome/Font-Awesome.git#5.0.0-wip",
