@@ -19,7 +19,7 @@
         <nav-item to="competitions" icon="event" title="Competitions"/>
         <nav-item to="teams" icon="people" title="Team"/>
         <nav-item v-if="!authenticated" icon="fa-sign-in-alt" title="Login"/>
-        <nav-item v-else icon="account_circle" title="Account"/>
+        <nav-item v-else icon="account_circle" :title="me.name"/>
         <v-divider v-if="admin"/>
         <nav-item v-if="admin" to="site-admin" icon="fa-wrench" title="Site Administration"/>
       </v-list>
@@ -31,26 +31,47 @@
       <v-toolbar-items class="hidden-sm-and-down">
         <nav-button to="competitions" icon="event" title="Competitions"/>
         <nav-button to="teams" icon="people" title="Team"/>
-        <nav-button v-if="!authenticated" icon="fa-sign-in-alt" title="Login"/>
-        <nav-button v-else icon="account_circle" title="Account"/>
+        <nav-button 
+        v-if="!authenticated" icon="fa-sign-in-alt" title="Login" @click="showLogin=true"/>
+        <nav-button v-else icon="account_circle" :title="me.name"/>
       </v-toolbar-items>
     </v-toolbar>
+    <Login-Dialog v-model="showLogin" />
   </div>
 </template>
 
 <script>
+  import gql from 'graphql-tag';
   import NavItem from './NavItem';
   import NavButton from './NavButton';
+  import LoginDialog from './LoginDialog';
+
   
   export default {
     components: {
       NavItem,
       NavButton,
+      LoginDialog,
     },
     data: () => ({
       mini: false,
-      authenticated: false,
       admin: false,
+      showLogin: false,
     }),
+    apollo: {
+      me: gql`
+        {
+          me {
+            roles
+            name
+          }
+        }
+      `,
+    },
+    computed: {
+      authenticated() {
+        return !!this.me;
+      },
+    },
   };
 </script>
