@@ -40,7 +40,6 @@ module.exports = {
         "max": 4,
         "allowFirstLine": false
       }
-    }]
-
+    }],
   }
 }

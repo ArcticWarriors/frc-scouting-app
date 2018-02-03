@@ -1,14 +1,16 @@
 <template>
   <div id="app">
     <v-app>
-      <Navigation/>
-      <router-view/>
+      <navigation/>
+      <v-content>
+        <router-view/>
+      </v-content>
     </v-app>
   </div>
 </template>
 
 <script>
-import Navigation from '@/components/Navigation';
+import Navigation from '@/components/nav/Navigation';
 
 export default {
   name: 'App',

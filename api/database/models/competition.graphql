@@ -1,0 +1,90 @@
+type Game {
+  year: Int! @unique
+  name: String
+}
+
+type Competition {
+  # The `id` field should be removed once multiple field unique constraints land, making game + code unique 
+  # GitHub: graphcool/graphcool#171 graphcool/graphcool#1160:issuecomment-345373277
+  id: ID! @unique
+  game: Game!
+  code: String!
+  name: String
+  # Start/end dates should be a straight date if that lands
+  # GitHub: graphcool/graphcool/#273 graphcool/graphcool/#91
+  startDate: DateTime
+  endDate: DateTime
+  location: Location
+  webpage: String
+  teams: [Team!]!
+}
+
+type MatchField {
+  id: ID! @unique
+  name: String!
+  type: String!
+  # Did this come from the API?
+  official: Boolean!
+  # If not set, this is a public field
+  owner: ScoutTeam
+  submitter: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type MatchData {
+  id: ID! @unique
+  match: Match!
+  field: MatchField!
+  value: String!
+  # If not set, this is not team-specific (ie, alliance data from the API)
+  team: Team
+  # Required as the field could be public, but the data is still associated with a specific team
+  owner: ScoutTeam!
+  submitter: User!
+  private: Boolean
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum CompetitionLevel {
+  # Practice
+  PR,
+  # Qualification
+  QM,
+  # Eighth-final
+  EF,
+  # Quarterfinal
+  QF,
+  # Semifinal,
+  SF,
+  # Final
+  F
+}
+
+enum MatchLocation {
+  RED1,
+  RED2,
+  RED3,
+  BLUE1,
+  BLUE2,
+  BLUE3
+}
+
+type MatchPlacement {
+  id: ID! @unique
+  team: Team!
+  match: Match!
+  location: MatchLocation
+}
+
+type Match {
+  # The `id` field should be removed once multiple field unique constraints land, making competition + number + level unique 
+  # GitHub: graphcool/graphcool#171 graphcool/graphcool#1160:issuecomment-345373277
+  id: ID! @unique
+  competition: Competition!
+  number: Int!
+  level: CompetitionLevel!
+  teams: [MatchPlacement!]!
+  matchData: [MatchData!]!
+}
