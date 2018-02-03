@@ -1,6 +1,6 @@
 <template>
   <div>
-    <P> PICK LIST </P>
+    <p>pick list</p>
   </div>
 </template>
 

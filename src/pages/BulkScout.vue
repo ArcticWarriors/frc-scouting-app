@@ -1,6 +1,6 @@
 <template>
   <div>
-    <P> BULK SCOUTING ENTRY </P>
+    <p>bulk scouting entry</p>
   </div>
 </template>
 

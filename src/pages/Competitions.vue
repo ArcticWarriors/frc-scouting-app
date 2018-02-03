@@ -1,6 +1,6 @@
 <template>
   <div>
-    <P> COMPETITIONS </P>
+    <p>competitions</p>
   </div>
 </template>
 
