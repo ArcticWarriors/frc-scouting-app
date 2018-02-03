@@ -1,9 +1,9 @@
 <template>
   <div>
     <h2>Team Fields</h2>
-    <field-entry :items="teamFields" @input="submitTF($event)"/>
+    <field-entry :items="teamFields" @input="submitTF"/>
     <h2>Match Fields</h2>
-    <field-entry :items="matchFields" @input="submitMF($event)"/>
+    <field-entry :items="matchFields" @input="submitMF"/>
   </div>
 </template>
 

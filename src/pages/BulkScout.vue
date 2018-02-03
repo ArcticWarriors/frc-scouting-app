@@ -1,7 +1,6 @@
 <template>
   <div>
     <P> BULK SCOUTING ENTRY </P>
-    
   </div>
 </template>
 

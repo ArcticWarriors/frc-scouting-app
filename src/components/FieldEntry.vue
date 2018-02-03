@@ -4,21 +4,17 @@
       :headers="headers"
       :items="items"
       hide-actions
-      class="elevation-1"
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
         <td class="text-xs-center">{{ props.item.type }}</td>
-        <td><v-btn @click="$delete()">Test</v-btn></td>
+        <td><v-btn @click="$delete()"><i class="material-icons">delete</i></v-btn></td>
       </template>
     </v-data-table>
-
     <v-layout row wrap>
       <v-flex xs2 sm5>
         <v-text-field
-          name="input-1-3"
           label="Field Name"
-          single-line
           :rules="[text => !!text || 'Text is required.']"
           v-model="fieldName"
         />
@@ -26,7 +22,7 @@
       <v-flex xs2 sm3>
         <v-select         
           :items="['Number', 'Text','Boolean']" 
-          label="Type" 
+          label="Field Type" 
           :rules="[text => !!text || 'Text is required.']"
           v-model="fieldType"
         />

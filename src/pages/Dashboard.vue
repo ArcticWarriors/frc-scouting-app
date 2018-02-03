@@ -1,10 +1,4 @@
 <template>
-  <div>
-    <P> DASHBOARD </P>
-    <div id="app">
-      {{ message }}
-    </div>
-
   </div>
 </template>
 
@@ -14,10 +8,8 @@ export default {
   data() {
     return {};
   },
-
 };
 </script>
 
 <style scoped>
-
 </style>
