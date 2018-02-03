@@ -1,6 +1,10 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog max-width="500px" v-model="internalShow">
+    <v-dialog 
+      max-width="500px" 
+      v-model="value" 
+      @input="val => $emit('input', val)"
+    >
       <v-card>
         <v-card-title>Login</v-card-title>
         <v-alert v-if="error" type="error" :value="true">
@@ -21,7 +25,7 @@
             hint="At least 8 characters"
             v-model="password"
             min="8"
-            :append-icon="passwordVisible ? 'visibility' : 'visibility_off'"
+            :append-icon="passwordVisible ? 'visibility_off' : 'visibility'"
             :append-icon-cb="() => (passwordVisible = !passwordVisible)"
             :type="passwordVisible ? 'text' : 'password'"
             counter
@@ -76,7 +80,7 @@ export default {
                 token
               }
             }
-          `,
+            `,
         variables: {
           email: this.email,
           password: this.password,
