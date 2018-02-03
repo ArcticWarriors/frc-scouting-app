@@ -1,5 +1,11 @@
 <template>
-  <div/>
+  <div>
+    <P> DASHBOARD </P>
+    <div id="app">
+      {{ message }}
+    </div>
+
+  </div>
 </template>
 
 <script>
@@ -8,6 +14,7 @@ export default {
   data() {
     return {};
   },
+
 };
 </script>
 
