@@ -77,7 +77,7 @@ export default {
         },
       }).then((data) => {
         localStorage.setItem('authToken', data.data.login.token);
-        this.internalShow = false;
+        this.$emit('input', false);
       }).catch((error) => {
         this.error = error.message.match(/^(?:GraphQL error:)?(.+)/)[1];
       });
