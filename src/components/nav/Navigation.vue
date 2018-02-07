@@ -36,7 +36,7 @@
         <nav-button v-else icon="account_circle" :title="me.name"/>
       </v-toolbar-items>
     </v-toolbar>
-    <Login-Dialog v-model="showLogin" />
+    <login-dialog v-model="showLogin" />
   </div>
 </template>
 

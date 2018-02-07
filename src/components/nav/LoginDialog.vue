@@ -33,7 +33,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" dark @click="login()">Login</v-btn> 
-          <v-btn color="primary" flat @click.stop="internalShow=false">Close</v-btn>
+          <v-btn color="primary" flat @click.stop="$emit=false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -61,16 +61,6 @@ export default {
     ],
     passwordVisible: false,
   }),
-  computed: {
-    internalShow: {
-      get() {
-        return this.value;
-      },
-      set(val) {
-        this.$emit('input', val);
-      },
-    },
-  },
   methods: {
     login() {
       this.$apollo.mutate({
@@ -78,9 +68,9 @@ export default {
             mutation($email: String!, $password: String!) {
               login(email: $email, password: $password) {
                 token
-              }
-            }
-            `,
+             }
+          }
+       `,
         variables: {
           email: this.email,
           password: this.password,
