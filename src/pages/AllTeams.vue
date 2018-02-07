@@ -1,7 +1,6 @@
 <template>
   <div>
-    <P> all of ze teams </P>
-    <h1> hehe i am a superstar</h1>
+    <p>all teams</p>
   </div>
 </template>
 

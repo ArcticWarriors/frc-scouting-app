@@ -1,6 +1,6 @@
 <template>
   <div>
-    <P> TEAM ADMIN PAGE </P>
+    <p>team administration page</p>
   </div>
 </template>
 
