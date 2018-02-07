@@ -23,33 +23,53 @@
       <v-spacer/>
       <v-toolbar-items>
         <nav-button to="competitions" icon="event" small-button class="hidden-sm-and-up"/>
-        <nav-button to="competitions" icon="event" title="Competitions" class = "hidden-xs-only"/>
+        <nav-button to="competitions" icon="event" title="Competitions" class="hidden-xs-only"/>
         <nav-button to="all-teams" icon="people" small-button class="hidden-sm-and-up"/>
         <nav-button to="all-teams" icon="people" title="Teams" class="hidden-xs-only"/>
         <nav-button 
           v-if="!authenticated" icon="fa-sign-in-alt" small-button 
-          class="hidden-sm-and-up"/>
+          class="hidden-sm-and-up" @click="showLogin=true"/>
         <nav-button 
           v-if="!authenticated" icon="fa-sign-in-alt" title="Login" 
-          class="hidden-xs-only"/>
-        <nav-button v-else icon="account_circle" title="Account"/>
+          class="hidden-xs-only" @click="showLogin=true"/>
+        <nav-button v-if="authenticated" icon="account_circle" small-button class="hidden-sm-and-up"/>
+        <nav-button v-if="authenticated" icon="account_circle" title="Account" class="hidden-xs-only"/>
       </v-toolbar-items>
     </v-toolbar>
+    <login-dialog v-model="showLogin" />
   </div> 
 </template>
 <script>
+  import gql from 'graphql-tag';
   import NavItem from './NavItem';
   import NavButton from './NavButton';
+  import LoginDialog from './LoginDialog';
   
   export default {
     components: {
       NavItem,
       NavButton,
+      LoginDialog,
     },
     data: () => ({
       mini: false,
-      authenticated: false,
       admin: false,
+      showLogin: false,
     }),
+    apollo: {
+      me: gql`
+        {
+          me {
+            roles
+            name
+          }
+        }
+      `,
+    },
+    computed: {
+      authenticated() {
+        return !!this.me;
+      },
+    },
   };
 </script>

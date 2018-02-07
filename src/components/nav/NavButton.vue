@@ -1,5 +1,5 @@
 <template>
-  <v-btn :icon="smallButton" flat :to="to"><v-icon>{{ icon }}</v-icon>&nbsp;{{ title }}</v-btn>
+  <v-btn flat :icon="smallButton" :to="to" @click="$emit('click')"><v-icon>{{ icon }}</v-icon>&nbsp;{{ title }}</v-btn>
 </template>
 
 <script>
