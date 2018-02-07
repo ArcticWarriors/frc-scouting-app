@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>rankings</p>
+    <p> RANKINGS </p>
   </div>
 </template>
 
