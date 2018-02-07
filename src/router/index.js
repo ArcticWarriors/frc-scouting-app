@@ -9,7 +9,6 @@ import PickList from '@/pages/PickList';
 import TeamAdmin from '@/pages/TeamAdmin';
 import AllTeams from '@/pages/AllTeams';
 
-
 Vue.use(Router);
 
 function authCheck(to, from, next) {
@@ -27,7 +26,6 @@ export default new Router({
         // TODO: Redirect to competition list if not logged in
         return 'dashboard';
       },
-      
     },
     {
       path: '/dashboard',
@@ -43,7 +41,6 @@ export default new Router({
         // TODO: Redirect to competition list if not logged in
         return 'competitions';
       },
-      
     },
     {
       path: '/competitions',
@@ -80,6 +77,5 @@ export default new Router({
       name: 'All Teams',
       component: AllTeams,
     },
-      
   ],
 });
