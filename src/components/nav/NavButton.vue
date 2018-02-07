@@ -1,5 +1,5 @@
 <template>
-  <v-btn flat :to="to"><v-icon>{{ icon }}</v-icon>&nbsp;{{ title }}</v-btn>
+  <v-btn :icon="smallButton" flat :to="to"><v-icon>{{ icon }}</v-icon>&nbsp;{{ title }}</v-btn>
 </template>
 
 <script>
@@ -16,7 +16,11 @@
       },
       title: {
         type: String,
-        required: true,
+        default: '',
+      },
+      smallButton: {
+        type: Boolean,
+        default: false,
       },
     },
   };
