@@ -6,7 +6,7 @@
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
       <li><a href="https://forum.vuejs.org" target="_blank">People Who Know What They're Talking About, Talking About It</a></li>
       <li><a href="https://chat.vuejs.org" target="_blank">People Who Don't Know What They're Talking About, but Still Talking About It</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">The President's Personal BullS**t Horn</a></li>
+      <li><a href="https://twitter.com/vuejs" target="_blank">The site for people who think themselves too important to keep to themselves, but too lazy to exceed 140 characters</a></li>
       <br>
       <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
     </ul>
@@ -14,11 +14,6 @@
     <ul>
         <v-btn flat href="http://router.vuejs.org/" target="_blank">vue-router</v-btn>
         <v-btn flat href="http://vuex.vuejs.org/">vuex</v-btn>
-
-
-      
-      
-      
       <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
