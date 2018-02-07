@@ -45,7 +45,6 @@
   import NavItem from './NavItem';
   import NavButton from './NavButton';
   import LoginDialog from './LoginDialog';
-
   
   export default {
     components: {
