@@ -34,15 +34,6 @@ export default new Router({
       beforeEnter: authCheck,
     },
     {
-      path: '/',
-      name: 'index',
-      // eslint-disable-next-line
-      redirect: () => {
-        // TODO: Redirect to competition list if not logged in
-        return 'competitions';
-      },
-    },
-    {
       path: '/competitions',
       name: 'Competitions',
       component: Competitions,
