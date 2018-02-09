@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>matches</p>
+    <P> MATCHES </P>
   </div>
 </template>
 

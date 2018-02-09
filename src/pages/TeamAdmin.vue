@@ -1,14 +1,41 @@
 <template>
   <div>
-    <p>team administration page</p>
+    <h2>Team Fields</h2>
+    <field-entry :items="teamFields" @input="submitTF"/>
+    <h2>Match Fields</h2>
+    <field-entry :items="matchFields" @input="submitMF"/>
   </div>
 </template>
 
 <script>
+import FieldEntry from '@/components/FieldEntry';
+
 export default {
   name: 'TeamAdmin',
+  components: { FieldEntry },
   data() {
-    return {};
+    return {
+    	teamFields: [],
+    	matchFields: [],
+    };
+  },
+  methods: {
+    submitTF(field) { 
+      if (field.name != '' && field.type != '') {
+        this.teamFields.push({ 
+          name: field.name, 
+          type: field.type,
+        }); 
+      }
+    },
+    submitMF(field) { 
+      if (field.name != '' && field.type != '') {
+        this.matchFields.push({ 
+          name: field.name, 
+          type: field.type,
+        }); 
+      }
+    },
   },
 };
 </script>

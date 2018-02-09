@@ -1,16 +1,45 @@
 <template>
   <div>
-    <p>all teams</p>
+   <P> all of ze teams </P>
+   <h1> hehe i am a superstar</h1>
+    <v-form v-model="valid">
+      <v-text-field
+        label="firstName"
+        v-model="firstName"
+        :rules="nameRules"
+        :counter="10"
+      />
+      <v-text-field
+        label="lastName"
+        v-model="lastName"
+        :rules="emailRules"
+      />
+    </v-form>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'AllTeams',
-  data() {
-    return {};
-  },
-};
+  export default {
+    data() {
+      return {
+        alid: false,
+        firstName: '',
+        nameRules: [
+          v => !!v || 'Name is required',
+          v => v.length <= 10 || 'Name must be less than 10 characters',
+        ],
+        lastName: '',
+        emailRules: [
+          v => !!v || 'E-mail is required',
+        ],
+      };
+    },
+    computed: {
+      fullName() {
+        return `${this.firstName} ${this.lastName}`;
+      },
+    },
+  };
 </script>
 
 <style scoped>
