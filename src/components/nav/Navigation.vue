@@ -1,9 +1,8 @@
 <template>
   <div>
-    <v-navigation-drawer
+    <v-navigation-drawer :mini-variant.sync="mini"
       clipped
       fixed
-      :mini-variant.sync="mini"
       stateless
       permanent
       app
@@ -22,18 +21,13 @@
       <v-toolbar-title>FRC Scouting</v-toolbar-title>
       <v-spacer/>
       <v-toolbar-items>
-        <nav-button to="competitions" icon="event" small-button class="hidden-sm-and-up"/>
-        <nav-button to="competitions" icon="event" title="Competitions" class="hidden-xs-only"/>
-        <nav-button to="all-teams" icon="people" small-button class="hidden-sm-and-up"/>
-        <nav-button to="all-teams" icon="people" title="Teams" class="hidden-xs-only"/>
-        <nav-button 
-          v-if="!authenticated" icon="fa-sign-in-alt" small-button 
-          class="hidden-sm-and-up" @click="showLogin=true"/>
-        <nav-button 
-          v-if="!authenticated" icon="fa-sign-in-alt" title="Login" 
-          class="hidden-xs-only" @click="showLogin=true"/>
-        <nav-button v-if="authenticated" icon="account_circle" small-button class="hidden-sm-and-up"/>
-        <nav-button v-if="authenticated" icon="account_circle" title="Account" class="hidden-xs-only"/>
+        <nav-button to="competitions" icon="event" title="Competitions"/>
+        <nav-button to="all-teams" icon="people" title="Teams"/>
+        <nav-button v-if="!authenticated"
+                    icon="fa-sign-in-alt"
+                    title="Login"
+                    @click="showLogin=true"/>
+        <nav-button v-else icon="account_circle" title="Account"/>
       </v-toolbar-items>
     </v-toolbar>
     <login-dialog v-model="showLogin" />

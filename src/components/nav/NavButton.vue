@@ -1,5 +1,8 @@
 <template>
-  <v-btn flat :icon="smallButton" :to="to" @click="$emit('click')"><v-icon>{{ icon }}</v-icon>&nbsp;{{ title }}</v-btn>
+  <v-btn :to="to" @click="$emit('click')" flat :icon="$vuetify.breakpoint.xsOnly">
+    <v-icon>{{ icon }}</v-icon>&nbsp;
+    <template v-if="$vuetify.breakpoint.smAndUp">{{ title }}</template>
+  </v-btn>
 </template>
 
 <script>
@@ -17,10 +20,6 @@
       title: {
         type: String,
         default: '',
-      },
-      smallButton: {
-        type: Boolean,
-        default: false,
       },
     },
   };
