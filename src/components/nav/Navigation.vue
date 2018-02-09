@@ -24,33 +24,60 @@
         <nav-item v-if="admin" to="site-admin" icon="fa-wrench" title="Site Administration"/>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar app fixed clipped-left>
+    <v-toolbar app dense fixed clipped-left>
       <v-toolbar-side-icon @click.stop="mini = !mini"/>
       <v-toolbar-title>FRC Scouting</v-toolbar-title>
       <v-spacer/>
-      <v-toolbar-items class="hidden-sm-and-down">
-        <nav-button to="competitions" icon="event" title="Competitions"/>
-        <nav-button to="teams" icon="people" title="Team"/>
-        <nav-button v-if="!authenticated" icon="fa-sign-in-alt" title="Login"/>
-        <nav-button v-else icon="account_circle" title="Account"/>
+      <v-toolbar-items>
+        <nav-button to="competitions" icon="event" small-button class="hidden-sm-and-up"/>
+        <nav-button to="competitions" icon="event" title="Competitions" class="hidden-xs-only"/>
+        <nav-button to="all-teams" icon="people" small-button class="hidden-sm-and-up"/>
+        <nav-button to="all-teams" icon="people" title="Teams" class="hidden-xs-only"/>
+        <nav-button 
+          v-if="!authenticated" icon="fa-sign-in-alt" small-button 
+          class="hidden-sm-and-up" @click="showLogin=true"/>
+        <nav-button 
+          v-if="!authenticated" icon="fa-sign-in-alt" title="Login" 
+          class="hidden-xs-only" @click="showLogin=true"/>
+        <nav-button v-if="authenticated" icon="account_circle" small-button class="hidden-sm-and-up"/>
+        <nav-button v-if="authenticated" icon="account_circle" title="Account" class="hidden-xs-only"/>
       </v-toolbar-items>
     </v-toolbar>
-  </div>
+    <login-dialog v-model="showLogin" />
+  </div> 
+>>>>>>> dev
 </template>
-
 <script>
+  import gql from 'graphql-tag';
   import NavItem from './NavItem';
   import NavButton from './NavButton';
+  import LoginDialog from './LoginDialog';
   
   export default {
     components: {
       NavItem,
       NavButton,
+      LoginDialog,
     },
     data: () => ({
       mini: false,
-      authenticated: false,
       admin: false,
+      showLogin: false,
     }),
+    apollo: {
+      me: gql`
+        {
+          me {
+            roles
+            name
+          }
+        }
+      `,
+    },
+    computed: {
+      authenticated() {
+        return !!this.me;
+      },
+    },
   };
 </script>
