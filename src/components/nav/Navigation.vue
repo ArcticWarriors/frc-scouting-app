@@ -45,7 +45,6 @@
     </v-toolbar>
     <login-dialog v-model="showLogin" />
   </div> 
->>>>>>> dev
 </template>
 <script>
   import gql from 'graphql-tag';

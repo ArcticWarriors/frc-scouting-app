@@ -1,9 +1,7 @@
 <template>
   <div>
     <h2>Team Fields</h2>
-    <field-entry :items="teamFields" @input="submitTF"/>
-    <h2>Match Fields</h2>
-    <field-entry :items="matchFields" @input="submitMF"/>
+    <field-entry :items="teamFields" @add="submitTF" @deleter="deleteTF"/>
   </div>
 </template>
 
@@ -28,14 +26,9 @@ export default {
         }); 
       }
     },
-    submitMF(field) { 
-      if (field.name != '' && field.type != '') {
-        this.matchFields.push({ 
-          name: field.name, 
-          type: field.type,
-        }); 
-      }
-    },
+    deleteTF(field) { 
+      this.teamFields = this.teamFields.filter(f => f.name != field.name)
+    },    
   },
 };
 </script>
