@@ -32,8 +32,10 @@
         <nav-button 
           v-if="!authenticated" icon="fa-sign-in-alt" title="Login" 
           class="hidden-xs-only" @click="showLogin=true"/>
-        <nav-button v-if="authenticated" icon="account_circle" small-button class="hidden-sm-and-up"/>
-        <nav-button v-if="authenticated" icon="account_circle" title="Account" class="hidden-xs-only"/>
+        <nav-button 
+        v-if="authenticated" icon="account_circle" small-button class="hidden-sm-and-up"/>
+        <nav-button 
+        v-if="authenticated" icon="account_circle" title="Account" class="hidden-xs-only"/>
       </v-toolbar-items>
     </v-toolbar>
     <login-dialog v-model="showLogin" />
