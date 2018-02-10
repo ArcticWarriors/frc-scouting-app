@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Scouting Scheduel</h1>
+    <h1>Scouting Schedule</h1>
     <v-data-table
       :headers="headers"
       :items="items"
@@ -8,12 +8,12 @@
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.Blue1[0] }} {{ props.item.Blue1[1] }}</td>
-        <td class="text-xs-right">{{ props.item.Blue2[0] }} {{ props.item.Blue2[1] }}</td>
-        <td class="text-xs-right">{{ props.item.Blue3[0] }} {{ props.item.Blue3[1] }}</td>
-        <td class="text-xs-right">{{ props.item.Red1[0] }} {{ props.item.Red1[1] }}</td>
-        <td class="text-xs-right">{{ props.item.Red2[0] }} {{ props.item.Red2[1] }}</td>
-        <td class="text-xs-right">{{ props.item.Red3[0] }} {{ props.item.Red3[1] }}</td>
+        <td class="text-xs-right">{{ props.item.Blue1[0] }}{{ props.item.Blue1[1] }}</td>
+        <td class="text-xs-right">{{ props.item.Blue2[0] }}{{ props.item.Blue2[1] }}</td>
+        <td class="text-xs-right">{{ props.item.Blue3[0] }}{{ props.item.Blue3[1] }}</td>
+        <td class="text-xs-right">{{ props.item.Red1[0] }}{{ props.item.Red1[1] }}</td>
+        <td class="text-xs-right">{{ props.item.Red2[0] }}{{ props.item.Red2[1] }}</td>
+        <td class="text-xs-right">{{ props.item.Red3[0] }}{{ props.item.Red3[1] }}</td>
       </template>
     </v-data-table>
   </div>
@@ -23,26 +23,26 @@
 export default {
   name: 'TeamAdmin',
   data() {
-  const matches = 80;
-  const teams = ['Blue1','Blue2','Blue3','Red1','Red2','Red3'];
-  const scouts = new aray(12).fill(0).map((curr, idx) => `Scout ${idx+1}`);
-  const scoutsPerTeam = 2;
-  
-  let scoutsEntered = 0;
-  
-  let assignments = [];
+    const matches = 80;
+    const teams = ['Blue1', 'Blue2', 'Blue3', 'Red1', 'Red2', 'Red3'];
+    const scouts = new Array(12).fill(0).map((curr, idx) => `Scout ${idx + 1}`);
+    const scoutsPerTeam = 2;
 
-  for (let match=0; match<mathces; match++) {
-    assignments[match] = {};
-      for (let team of teams) {
-        assignments[match][team] =[];
-        for (let scoutSlot=0; scoutSlot<scoutsPerTeam; scoutSlot++) {
-          assignment[match][team][scoutSlot] = scouts[scoutsEntered % scouts.length];
-          scoutsEntered++;
-        };
-      };
-    };
-  },
+    let scoutsEntered = 0;
+
+    const assignments = [];
+
+    for (let match = 0; match < matches; match += 1) {
+      assignments[match] = {};
+      // eslint-disable-next-line
+      for (const team of teams) {
+        assignments[match][team] = [];
+        for (let scoutSlot = 0; scoutSlot < scoutsPerTeam; scoutSlot += 1) {
+          assignments[match][team][scoutSlot] = scouts[scoutsEntered % scouts.length];
+          scoutsEntered += 1;
+        }
+      }
+    }
     return {
       headers: [
         {
@@ -60,7 +60,6 @@ export default {
       ],
       items: [
         {
-          value: false,
           name: 'Match 1',
           Blue1: '',
           Blue2: '',
@@ -70,7 +69,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 2',
           Blue1: '',
           Blue2: '',
@@ -80,7 +78,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 3',
           Blue1: '',
           Blue2: '',
@@ -90,7 +87,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 4',
           Blue1: '',
           Blue2: '',
@@ -100,7 +96,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 5',
           Blue1: '',
           Blue2: '',
@@ -110,7 +105,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 6',
           Blue1: '',
           Blue2: '',
@@ -120,7 +114,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 7',
           Blue1: '',
           Blue2: '',
@@ -130,7 +123,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 8',
           Blue1: '',
           Blue2: '',
@@ -140,7 +132,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 9',
           Blue1: '',
           Blue2: '',
@@ -150,7 +141,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 10',
           Blue1: '',
           Blue2: '',
@@ -160,7 +150,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 11',
           Blue1: '',
           Blue2: '',
@@ -170,7 +159,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 12',
           Blue1: '',
           Blue2: '',
@@ -180,7 +168,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 13',
           Blue1: '',
           Blue2: '',
@@ -190,7 +177,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 14',
           Blue1: '',
           Blue2: '',
@@ -200,7 +186,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 15',
           Blue1: '',
           Blue2: '',
@@ -210,7 +195,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 16',
           Blue1: '',
           Blue2: '',
@@ -220,7 +204,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 17',
           Blue1: '',
           Blue2: '',
@@ -230,7 +213,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 18',
           Blue1: '',
           Blue2: '',
@@ -240,7 +222,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 19',
           Blue1: '',
           Blue2: '',
@@ -250,7 +231,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 20',
           Blue1: '',
           Blue2: '',
@@ -260,7 +240,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 21',
           Blue1: '',
           Blue2: '',
@@ -270,7 +249,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 22',
           Blue1: '',
           Blue2: '',
@@ -280,7 +258,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 23',
           Blue1: '',
           Blue2: '',
@@ -290,7 +267,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 24',
           Blue1: '',
           Blue2: '',
@@ -300,7 +276,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 25',
           Blue1: '',
           Blue2: '',
@@ -310,7 +285,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 26',
           Blue1: '',
           Blue2: '',
@@ -320,7 +294,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 27',
           Blue1: '',
           Blue2: '',
@@ -330,7 +303,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 28',
           Blue1: '',
           Blue2: '',
@@ -340,7 +312,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 29',
           Blue1: '',
           Blue2: '',
@@ -350,7 +321,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 30',
           Blue1: '',
           Blue2: '',
@@ -360,7 +330,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 31',
           Blue1: '',
           Blue2: '',
@@ -370,7 +339,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 32',
           Blue1: '',
           Blue2: '',
@@ -380,7 +348,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 33',
           Blue1: '',
           Blue2: '',
@@ -390,7 +357,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 34',
           Blue1: '',
           Blue2: '',
@@ -400,7 +366,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 35',
           Blue1: '',
           Blue2: '',
@@ -410,7 +375,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 36',
           Blue1: '',
           Blue2: '',
@@ -420,7 +384,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 37',
           Blue1: '',
           Blue2: '',
@@ -430,7 +393,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 38',
           Blue1: '',
           Blue2: '',
@@ -440,7 +402,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 39',
           Blue1: '',
           Blue2: '',
@@ -450,7 +411,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 40',
           Blue1: '',
           Blue2: '',
@@ -460,7 +420,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 41',
           Blue1: '',
           Blue2: '',
@@ -470,7 +429,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 42',
           Blue1: '',
           Blue2: '',
@@ -480,7 +438,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 43',
           Blue1: '',
           Blue2: '',
@@ -490,7 +447,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 44',
           Blue1: '',
           Blue2: '',
@@ -500,7 +456,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 45',
           Blue1: '',
           Blue2: '',
@@ -510,7 +465,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 46',
           Blue1: '',
           Blue2: '',
@@ -520,7 +474,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 47',
           Blue1: '',
           Blue2: '',
@@ -530,7 +483,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 48',
           Blue1: '',
           Blue2: '',
@@ -540,7 +492,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 49',
           Blue1: '',
           Blue2: '',
@@ -550,7 +501,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 50',
           Blue1: '',
           Blue2: '',
@@ -560,7 +510,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 51',
           Blue1: '',
           Blue2: '',
@@ -570,7 +519,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 52',
           Blue1: '',
           Blue2: '',
@@ -580,7 +528,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 53',
           Blue1: '',
           Blue2: '',
@@ -590,7 +537,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 54',
           Blue1: '',
           Blue2: '',
@@ -600,7 +546,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 55',
           Blue1: '',
           Blue2: '',
@@ -610,7 +555,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 56',
           Blue1: '',
           Blue2: '',
@@ -620,7 +564,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 57',
           Blue1: '',
           Blue2: '',
@@ -630,7 +573,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 58',
           Blue1: '',
           Blue2: '',
@@ -640,7 +582,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 59',
           Blue1: '',
           Blue2: '',
@@ -650,7 +591,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 60',
           Blue1: '',
           Blue2: '',
@@ -660,7 +600,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 61',
           Blue1: '',
           Blue2: '',
@@ -670,7 +609,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 62',
           Blue1: '',
           Blue2: '',
@@ -680,7 +618,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 63',
           Blue1: '',
           Blue2: '',
@@ -690,7 +627,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 64',
           Blue1: '',
           Blue2: '',
@@ -700,7 +636,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 65',
           Blue1: '',
           Blue2: '',
@@ -710,7 +645,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 66',
           Blue1: '',
           Blue2: '',
@@ -720,7 +654,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 67',
           Blue1: '',
           Blue2: '',
@@ -730,7 +663,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 68',
           Blue1: '',
           Blue2: '',
@@ -740,7 +672,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 69 ;)',
           Blue1: '',
           Blue2: '',
@@ -750,7 +681,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 70',
           Blue1: '',
           Blue2: '',
@@ -760,7 +690,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 71',
           Blue1: '',
           Blue2: '',
@@ -770,7 +699,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 72',
           Blue1: '',
           Blue2: '',
@@ -780,7 +708,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 73',
           Blue1: '',
           Blue2: '',
@@ -790,7 +717,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 74',
           Blue1: '',
           Blue2: '',
@@ -800,7 +726,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 75',
           Blue1: '',
           Blue2: '',
@@ -810,7 +735,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 76',
           Blue1: '',
           Blue2: '',
@@ -820,7 +744,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 77',
           Blue1: '',
           Blue2: '',
@@ -830,7 +753,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 78',
           Blue1: '',
           Blue2: '',
@@ -840,7 +762,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 79',
           Blue1: '',
           Blue2: '',
@@ -850,7 +771,6 @@ export default {
           Red3: '',
         },
         {
-          value: false,
           name: 'Match 80',
           Blue1: '',
           Blue2: '',
@@ -860,7 +780,7 @@ export default {
           Red3: '',
         },
       ],
-    },
+    };
   },
 };
 </script>
