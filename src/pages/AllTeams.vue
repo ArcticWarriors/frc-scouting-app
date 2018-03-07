@@ -1,7 +1,7 @@
 <template>
   <div>
-   <P> all of ze teams </P>
-   <h1> hehe i am a superstar</h1>
+    <P> all of ze teams </P>
+    <h1> hehe i am a superstar</h1>
     <v-form v-model="valid">
       <v-text-field
         label="firstName"

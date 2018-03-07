@@ -27,7 +27,7 @@ export default {
       }
     },
     deleteTF(field) { 
-      this.teamFields = this.teamFields.filter(f => f.name != field.name)
+      this.teamFields = this.teamFields.filter(f => f.name != field.name);
     },    
   },
 };
