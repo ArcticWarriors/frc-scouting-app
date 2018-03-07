@@ -1,11 +1,11 @@
 <template>
   <div>
     <v-navigation-drawer :mini-variant.sync="mini"
-      clipped
-      fixed
-      stateless
-      permanent
-      app
+                         clipped
+                         fixed
+                         stateless
+                         permanent
+                         app
     >
       <v-list dense>
         <nav-item to="dashboard" icon="dashboard" title="Dashboard"/>
