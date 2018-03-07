@@ -18,7 +18,7 @@ Vue.config.productionTip = false;
 // Apollo setup
 const httpLink = new HttpLink({
   // Update this to be filled out dynamically via NODE_ENV and/or environment vars
-  uri: 'http://localhost:4000',
+  uri: API_ENDPOINT,
 });
 
 const authLink = setContext((_, { headers }) => {

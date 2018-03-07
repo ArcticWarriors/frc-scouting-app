@@ -1,15 +1,15 @@
 // http://eslint.org/docs/user-guide/configuring
 
 module.exports = {
-  root: true,
-  extends: [
+  'root': true,
+  'extends': [
       'airbnb-base',
       'plugin:vue/recommended',
   ],
-  parserOptions: {
-     parser: 'babel-eslint',
-     ecmaVersion: 2017,
-     sourceType: 'module'
+  'parserOptions': {
+     'parser': 'babel-eslint',
+     'ecmaVersion': 2017,
+     'sourceType': 'module'
   },
   // Check if imports actually resolve
   'settings': {
@@ -18,6 +18,9 @@ module.exports = {
         'config': 'build/webpack.base.conf.js'
       }
     }
+  },
+  'globals': {
+    API_ENDPOINT: true,
   },
   'rules': {
     // Don't require .vue extension when importing
