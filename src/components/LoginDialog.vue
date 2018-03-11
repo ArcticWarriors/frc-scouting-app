@@ -76,7 +76,11 @@ export default {
           password: this.password,
         },
       }).then((data) => {
+        console.log(data);
         localStorage.setItem('authToken', data.data.login.token);
+        this.email = '';
+        this.password = '';
+        this.error = '';
         this.$emit('input', false);
       }).catch((error) => {
         this.error = error.message.match(/^(?:GraphQL error:)?(.+)/)[1];

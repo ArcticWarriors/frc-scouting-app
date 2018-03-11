@@ -1,5 +1,5 @@
 <template>
-  <v-list-tile :to="to">
+  <v-list-tile :to="to" :disabled="disabled">
     <v-list-tile-action>
       <v-icon>{{ icon }}</v-icon>
     </v-list-tile-action>
@@ -24,6 +24,10 @@
       title: {
         type: String,
         required: true,
+      },
+      disabled: {
+        type: Boolean,
+        default: false,
       },
     },
   };

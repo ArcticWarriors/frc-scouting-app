@@ -1,5 +1,6 @@
 <template>
-  <v-btn :to="to" @click="$emit('click')" flat :icon="$vuetify.breakpoint.xsOnly">
+  <v-btn :to="to" @click="$emit('click')" flat :icon="$vuetify.breakpoint.xsOnly"
+         :disabled="disabled">
     <v-icon>{{ icon }}</v-icon>&nbsp;
     <template v-if="$vuetify.breakpoint.smAndUp">{{ title }}</template>
   </v-btn>
@@ -20,6 +21,10 @@
       title: {
         type: String,
         default: '',
+      },
+      disabled: {
+        type: Boolean,
+        default: false,
       },
     },
   };

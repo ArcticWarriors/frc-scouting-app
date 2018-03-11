@@ -17,6 +17,6 @@ datamodel:
 
 # seeding your service with initial data
 seed:
-  import: seeds/seed.graphql
+  import: seeds/${env:SEED}.graphql
 
 cluster: ${env:PRISMA_CLUSTER}
