@@ -31,14 +31,14 @@
       </v-toolbar-items>
     </v-toolbar>
     <login-dialog v-model="showLogin" />
-  </div> 
+  </div>
 </template>
 <script>
   import gql from 'graphql-tag';
   import NavItem from './NavItem';
   import NavButton from './NavButton';
   import LoginDialog from './LoginDialog';
-  
+
   export default {
     components: {
       NavItem,

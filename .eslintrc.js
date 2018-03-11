@@ -29,8 +29,9 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', {
       'optionalDependencies': ['test/unit/index.js']
     }],
-    // Allow debugger during development
+    // Allow debugger and console during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // Allow trailing spaces in development (many IDEs add them, so this causes nagging with the dev server)
     'no-trailing-spaces': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // Allow four attributes per line

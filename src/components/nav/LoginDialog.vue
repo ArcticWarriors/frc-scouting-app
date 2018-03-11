@@ -1,8 +1,8 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog 
-      max-width="500px" 
-      v-model="value" 
+    <v-dialog
+      max-width="500px"
+      v-model="value"
       @input="val => $emit('input', val)"
     >
       <v-card>
@@ -32,7 +32,7 @@
           />
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" dark @click="login()">Login</v-btn> 
+          <v-btn color="primary" dark @click="login()">Login</v-btn>
           <v-btn color="primary" flat @click.stop="$emit('input', false)">Close</v-btn>
         </v-card-actions>
       </v-card>
