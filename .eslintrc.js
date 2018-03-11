@@ -8,8 +8,6 @@ module.exports = {
   ],
   parserOptions: {
      parser: 'babel-eslint',
-     ecmaVersion: 2017,
-     sourceType: 'module'
   },
   // Check if imports actually resolve
   'settings': {
@@ -24,6 +22,16 @@ module.exports = {
     'import/extensions': ['error', 'always', {
       'js': 'never',
       'vue': 'never'
+    }],
+    // disallow reassignment of function parameters
+    // disallow parameter object manipulation except for specific exclusions
+    'no-param-reassign': ['error', {
+      props: true,
+      ignorePropertyModificationsFor: [
+        'state', // for vuex state
+        'acc', // for reduce accumulators
+        'e' // for e.returnvalue
+      ]
     }],
     // Allow optionalDependencies
     'import/no-extraneous-dependencies': ['error', {
