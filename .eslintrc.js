@@ -8,8 +8,6 @@ module.exports = {
   ],
   'parserOptions': {
      'parser': 'babel-eslint',
-     'ecmaVersion': 2017,
-     'sourceType': 'module'
   },
   // Check if imports actually resolve
   'settings': {
@@ -20,7 +18,7 @@ module.exports = {
     }
   },
   'globals': {
-    API_ENDPOINT: true,
+    'API_ENDPOINT': true,
   },
   'rules': {
     // Don't require .vue extension when importing
@@ -28,12 +26,23 @@ module.exports = {
       'js': 'never',
       'vue': 'never'
     }],
+    // disallow reassignment of function parameters
+    // disallow parameter object manipulation except for specific exclusions
+    'no-param-reassign': ['error', {
+      'props': true,
+      'ignorePropertyModificationsFor': [
+        'state', // for vuex state
+        'acc', // for reduce accumulators
+        'e' // for e.returnvalue
+      ]
+    }],
     // Allow optionalDependencies
     'import/no-extraneous-dependencies': ['error', {
       'optionalDependencies': ['test/unit/index.js']
     }],
-    // Allow debugger during development
+    // Allow debugger and console during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // Allow trailing spaces in development (many IDEs add them, so this causes nagging with the dev server)
     'no-trailing-spaces': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // Allow four attributes per line

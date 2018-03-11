@@ -32,7 +32,7 @@
                     title="Login"
                     @click="showLogin=true"/>
         <v-menu v-else offset-y>
-          <nav-button icon="account_circle" :title="me.name" slot="activator"/>
+          <nav-button slot="activator" :title="me.name" icon="account_circle"/>
           <v-list>
             <v-list-tile disabled>
               <v-list-tile-title>Settings</v-list-tile-title>
@@ -48,43 +48,43 @@
   </div> 
 </template>
 <script>
-  import gql from 'graphql-tag';
-  import LoginDialog from '@/components/LoginDialog';
-  import NavItem from './NavItem';
-  import NavButton from './NavButton';
-  
-  export default {
-    components: {
-      NavItem,
-      NavButton,
-      LoginDialog,
+import gql from 'graphql-tag';
+import LoginDialog from '@/components/LoginDialog';
+import NavItem from './NavItem';
+import NavButton from './NavButton';
+
+export default {
+  components: {
+    NavItem,
+    NavButton,
+    LoginDialog,
+  },
+  data: () => ({
+    mini: false,
+    admin: false,
+    showLogin: false,
+  }),
+  apollo: {
+    me: gql`{
+          me {
+            roles
+            name
+          }
+        }`,
+  },
+  computed: {
+    authenticated() { return !!this.me; },
+    roles() { return this.me.roles || []; },
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('authToken');
+      window.location.reload();
     },
-    data: () => ({
-      mini: false,
-      admin: false,
-      showLogin: false,
-    }),
-    apollo: {
-      me: gql`{
-            me {
-              roles
-              name
-            }
-          }`,
+    hasRole(roles) {
+      if (!this.authenticated) return false;
+      return this.me.roles.some(role => roles.includes(role));
     },
-    computed: {
-      authenticated() { return !!this.me; },
-      roles() { return this.me.roles || []; },
-    },
-    methods: {
-      logout() {
-        localStorage.removeItem('authToken');
-        location.reload();
-      },
-      hasRole(roles) {
-        if (!this.authenticated) return false;
-        return this.me.roles.some(role => roles.includes(role));
-      },
-    },
-  };
+  },
+};
 </script>

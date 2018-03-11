@@ -17,7 +17,7 @@ Vue.use(Router);
 
 async function authCheck(to, from, next) {
   const userCheck = !to.meta.auth ? () => true :
-                                    user => user.roles.some(role => to.meta.auth.includes(role));
+    user => user.roles.some(role => to.meta.auth.includes(role));
   
   const res = await new Promise((resolve) => {
     // We have to use setTimeout because otherwise apollo won't be set up yet

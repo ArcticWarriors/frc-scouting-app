@@ -15,9 +15,9 @@ export default {
   },
   methods: {
     doredir() {
-      this.$router.push(this.$route.query.redir)
-    }
-  }
+      this.$router.push(this.$route.query.redir);
+    },
+  },
 };
 </script>
 
