@@ -10,21 +10,21 @@
 </template>
 
 <script>
-  export default {
-    name: 'NavItem',
-    props: {
-      to: {
-        type: String,
-        default: '',
-      },
-      icon: {
-        type: String,
-        default: '',
-      },
-      title: {
-        type: String,
-        required: true,
-      },
+export default {
+  name: 'NavItem',
+  props: {
+    to: {
+      type: String,
+      default: '',
     },
-  };
+    icon: {
+      type: String,
+      default: '',
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+  },
+};
 </script>

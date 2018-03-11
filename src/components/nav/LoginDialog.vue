@@ -1,33 +1,33 @@
 <template>
   <v-layout row justify-center>
     <v-dialog
-      max-width="500px"
       v-model="value"
+      max-width="500px"
       @input="val => $emit('input', val)"
     >
       <v-card>
         <v-card-title>Login</v-card-title>
-        <v-alert type="error" :value="error">
+        <v-alert :value="error" type="error">
           {{ error }}
         </v-alert>
         <v-card-text>
           <v-text-field
-            label="Email address"
             :rules="emailRules"
             v-model="email"
+            label="Email address"
             hint="Enter your email!"
             type="email"
             persistent-hint
           />
           <v-text-field
-            name="input-10-1"
-            label="Enter your password"
-            hint="At least 8 characters"
             v-model="password"
-            min="8"
             :append-icon="passwordVisible ? 'visibility_off' : 'visibility'"
             :append-icon-cb="() => (passwordVisible = !passwordVisible)"
             :type="passwordVisible ? 'text' : 'password'"
+            name="input-10-1"
+            label="Enter your password"
+            hint="At least 8 characters"
+            min="8"
             counter
           />
         </v-card-text>
@@ -79,7 +79,7 @@ export default {
         localStorage.setItem('authToken', data.data.login.token);
         this.$emit('input', false);
       }).catch((error) => {
-        this.error = error.message.match(/^(?:GraphQL error:)?(.+)/)[1];
+        [, this.error] = error.message.match(/^(?:GraphQL error:)?(.+)/);
       });
     },
   },

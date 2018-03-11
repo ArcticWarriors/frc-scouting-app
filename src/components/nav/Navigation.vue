@@ -34,24 +34,24 @@
   </div>
 </template>
 <script>
-  import gql from 'graphql-tag';
-  import NavItem from './NavItem';
-  import NavButton from './NavButton';
-  import LoginDialog from './LoginDialog';
+import gql from 'graphql-tag';
+import NavItem from './NavItem';
+import NavButton from './NavButton';
+import LoginDialog from './LoginDialog';
 
-  export default {
-    components: {
-      NavItem,
-      NavButton,
-      LoginDialog,
-    },
-    data: () => ({
-      mini: false,
-      admin: false,
-      showLogin: false,
-    }),
-    apollo: {
-      me: gql`
+export default {
+  components: {
+    NavItem,
+    NavButton,
+    LoginDialog,
+  },
+  data: () => ({
+    mini: false,
+    admin: false,
+    showLogin: false,
+  }),
+  apollo: {
+    me: gql`
         {
           me {
             roles
@@ -59,11 +59,11 @@
           }
         }
       `,
+  },
+  computed: {
+    authenticated() {
+      return !!this.me;
     },
-    computed: {
-      authenticated() {
-        return !!this.me;
-      },
-    },
-  };
+  },
+};
 </script>
