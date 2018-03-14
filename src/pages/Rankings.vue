@@ -21,7 +21,7 @@
         <td class="text-xs-right">{{ props.item.match }}</td>
         <td class="text-xs-right">{{ props.item.boolean }}</td>
         <td class="text-xs-right">{{ props.item.points }}</td>
-        <td class="text-xs-right">{{ props.item.protein }}</td>
+        <td class="text-xs-right">{{ props.item.text }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
@@ -58,6 +58,9 @@
               <v-flex xs12 sm6 md4>
                 <v-text-field label="Points Exchanged" v-model="editedItem.points"></v-text-field>
               </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field label="Text Example" v-model="editedItem.text"></v-text-field>
+              </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
@@ -72,6 +75,7 @@
 </template>
 
 <script>
+
   export default {
     data: () => ({
       search: '',
@@ -84,14 +88,14 @@
         match: 'Match ' + 0,
         points: 0,
         boolean: 0,
-        protein: 0
+        text: 'none'
       },
       defaultItem: {
         name: 'Team ' + 0,
         match: 'Match ' + 0,
         points: '',
         boolean: 0,
-        protein: 0
+        text: 'none'
       }
     }),
 
@@ -123,7 +127,7 @@
         { text: 'Match #', value: 'match' },
         { text: 'Boolean', value: 'boolean' },
         { text: 'Points', value: 'points' },
-        { text: 'Protein (g)', value: 'protein' },
+        { text: 'Text example', value: 'text' },
         { text: 'Actions', value: 'name', sortable: false }
         ]
       },
