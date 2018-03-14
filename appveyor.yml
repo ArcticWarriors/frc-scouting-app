@@ -10,7 +10,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   # install modules
   - npm install
-  - copy api/.env.example api/.env
+  - copy api\.env.example api\.env
   - npm run prisma deploy
 
 # Post-install test scripts.
