@@ -2,15 +2,18 @@
   <div>
     <h2>Team Fields</h2>
     <field-entry :items="teamFields" @add="submitTF" @deleter="deleteTF"/>
+    <Team3724Data team="2324"/>
   </div>
 </template>
 
 <script>
 import FieldEntry from '@/components/FieldEntry';
+import teamData from '@/components/teamData';
+import Team3724Data from '@/components/Team3724Data';
 
 export default {
   name: 'TeamAdmin',
-  components: { FieldEntry },
+  components: { FieldEntry, teamData, Team3724Data},
   data() {
     return {
     	teamFields: [],

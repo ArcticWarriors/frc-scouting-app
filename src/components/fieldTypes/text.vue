@@ -1,7 +1,7 @@
 <template>
   <v-layout row>
     <v-flex xs4>
-      <v-subheader>Comments</v-subheader>
+      <v-subheader>{{ comments }}</v-subheader>
     </v-flex>
     <v-flex xs8>
       <v-text-field
@@ -19,6 +19,12 @@ export default {
   data() {
     return {};
   },
+    props: {
+    comments: {
+      type: String,
+      default: '',
+    },
+  }
 };
 </script>
 

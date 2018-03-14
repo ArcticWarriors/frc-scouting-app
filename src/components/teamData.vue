@@ -9,7 +9,8 @@
       <v-card-text>
         <v-container fluid>
           <FieldBoolean/>
-          <FieldText/>
+          <FieldText comments="boi"/>
+          <FieldText comments="get good"/>
           <FieldNumber/>
         </v-container>
       </v-card-text>
