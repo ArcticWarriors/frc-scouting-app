@@ -62,6 +62,11 @@
           </v-btn>
         </td>
       </template>
+      <template slot="expand" slot-scope="props">
+      	<v-card flat>
+        	<v-card-text>Team Details</v-card-text>
+      	</v-card>
+      </template>
       <v-alert slot="no-results" :value="true" color="error" icon="warning">
         Your search for "{{ search }}" found no results.
       </v-alert>
@@ -77,20 +82,30 @@
     data: () => ({
       search: '',
       dialog: false,
-      headers: [
-        {
-          text: 'Teams',
-          align: 'center',
-          sortable: false,
-          value: 'name'
-        },
-        { text: 'Points Per Game', value: 'points' },
-        { text: 'Boolean', value: 'boolean' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
-        { text: 'Actions', value: 'name', sortable: false }
+      headers: [],
+      items: [
+          {
+            name: 174,
+            points: 159,
+            boolean: 'true',
+            carbs: 24,
+            protein: 4.0
+          },
+          {
+            name: 3789,
+            points: 237,
+            boolean: 'false',
+            carbs: 37,
+            protein: 4.3
+          },
+          {
+            name: 175,
+            points: 262,
+            boolean: 'true',
+            carbs: 23,
+            protein: 6.9
+          }
       ],
-      items: [],
       editedIndex: -1,
       editedItem: {
 
@@ -127,28 +142,18 @@
 
     methods: {
       initialize () {
-        this.items = [
-          {
-            name: 174,
-            points: 159,
-            boolean: 'true',
-            carbs: 24,
-            protein: 4.0
-          },
-          {
-            name: 3789,
-            points: 237,
-            boolean: 'false',
-            carbs: 37,
-            protein: 4.3
-          },
-          {
-            name: 175,
-            points: 262,
-            boolean: 'true',
-            carbs: 23,
-            protein: 6.9
-          }
+        this.headers = [
+        {
+          text: 'Teams',
+          align: 'center',
+          sortable: false,
+          value: 'name'
+        },
+        { text: 'Points Per Game', value: 'points' },
+        { text: 'Boolean', value: 'boolean' },
+        { text: 'Carbs (g)', value: 'carbs' },
+        { text: 'Protein (g)', value: 'protein' },
+        { text: 'Actions', value: 'name', sortable: false }
         ]
       },
 
