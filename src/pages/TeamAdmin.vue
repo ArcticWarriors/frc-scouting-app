@@ -3,6 +3,7 @@
     <h2>Team Fields</h2>
     <field-entry :items="teamFields" @add="submitTF" @deleter="deleteTF"/>
     <Team3724Data team="2324"/>
+    <teamData team="123"/>
   </div>
 </template>
 
@@ -16,7 +17,16 @@ export default {
   components: { FieldEntry, teamData, Team3724Data},
   data() {
     return {
-    	teamFields: [],
+    	teamFields: [
+                  {
+            name: 'Frozen Yogurt',
+            type: 'Boolean',
+          },
+                  {
+            name: 'Bloo',
+            type: 'Number',
+          }          
+      ],
     	matchFields: [],
     };
   },

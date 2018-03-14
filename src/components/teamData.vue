@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog174" scrollable max-width="600px">
-    <v-btn color="primary" dark slot="activator">{{ match }}</v-btn>
+    <v-btn color="primary" dark slot="activator">Field Data Form</v-btn>
     <v-card>
       <v-card-title>
         <span class="headline">Team {{ team }} - Matches</span>
@@ -9,7 +9,7 @@
       <v-card-text>
         <v-container fluid>
           <FieldBoolean/>
-          <FieldText comments="boi"/>
+          <FieldText comments= 'props.item.name'/>
           <FieldText comments="get good"/>
           <FieldNumber/>
         </v-container>
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import FieldEntry from '@/components/FieldEntry';
+
 import FieldText from '@/components/fieldTypes/text';
 import FieldNumber from '@/components/fieldTypes/number';
 import FieldBoolean from '@/components/fieldTypes/boolean';
@@ -43,11 +45,7 @@ export default {
     team: {
       type: String,
       default: '',
-    },
-    match: {
-      type: Number,
-      default: 1,
-    },
+    }
   },
 };
 </script>
