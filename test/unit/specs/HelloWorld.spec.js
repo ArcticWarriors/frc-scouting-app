@@ -6,6 +6,10 @@ describe('HelloWorld.vue', () => {
     const Constructor = Vue.extend(HelloWorld);
     const vm = new Constructor().$mount();
     expect(vm.$el.querySelector('.hello h1').textContent)
+<<<<<<< HEAD
     .toEqual('Welcome to the Vue.js App');
+=======
+      .toEqual('Welcome to Your Vue.js App');
+>>>>>>> origin/dev
   });
 });
