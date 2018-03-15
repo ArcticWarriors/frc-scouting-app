@@ -2,7 +2,8 @@
   <div>
     <h2>Team Fields</h2>
     <field-entry :items="teamFields" @add="submitTF" @deleter="deleteTF"/>
-    <Team3724Data team="2324"/>
+    <h2>Match Fields</h2>
+    <field-entry :items="matchFields" @add="submitMF" @deleter="deleteMF"/>
     <teamData team="123"/>
   </div>
 </template>
@@ -10,11 +11,10 @@
 <script>
 import FieldEntry from '@/components/FieldEntry';
 import teamData from '@/components/teamData';
-import Team3724Data from '@/components/Team3724Data';
 
 export default {
   name: 'TeamAdmin',
-  components: { FieldEntry, teamData, Team3724Data},
+  components: { FieldEntry, teamData},
   data() {
     return {
     	teamFields: [
@@ -39,9 +39,20 @@ export default {
         }); 
       }
     },
+    submitMF(field) { 
+      if (field.name != '' && field.type != '') {
+        this.matchFields.push({ 
+          name: field.name, 
+          type: field.type,
+        }); 
+      }
+    },
     deleteTF(field) { 
       this.teamFields = this.teamFields.filter(f => f.name != field.name);
     },    
+    deleteMF(field) { 
+      this.matchFields = this.matchFields.filter(f => f.name != field.name);
+    },
   },
 };
 </script>
