@@ -18,13 +18,16 @@
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.match }}</td>
-        <td class="text-xs-right">{{ props.item.boolean }}</td>
-        <td class="text-xs-right">{{ props.item.points }}</td>
-        <td class="text-xs-right">{{ props.item.text }}</td>
-        <td class="justify-center layout px-0">
+        <td class="text-xs-left">{{ props.item.match }}</td>
+        <td class="text-xs-left">{{ props.item.boolean }}</td>
+        <td class="text-xs-left">{{ props.item.points }}</td>
+        <td class="text-xs-left">{{ props.item.text }}</td>
+        <td class="justify-left layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
+          </v-btn>
+          <v-btn icon class="mx-0" @click="comment(props.item)">
+          	<v-icon>info</v-icon>
           </v-btn>
         </td>
       </template>
@@ -52,11 +55,20 @@
               <v-flex xs12 sm6 md4>
                 <v-text-field label="Match #" v-model="editedItem.match"></v-text-field>
               </v-flex>
+
+			    <v-flex xs12>
+			      <v-subheader>Boolean</v-subheader>
+			    </v-flex>
+			    <v-flex xs12>
+      		<v-radio-group v-model="editedItem.boolean">
+        		<v-radio label="true" value="true" color="success" />
+        		<v-radio label="false" value="false" color="error"/>
+      		</v-radio-group>
+         		</v-flex>
+
               <v-flex xs12 sm6 md4>
-                <v-text-field label="Boolean" v-model="editedItem.boolean"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field label="Points Exchanged" v-model="editedItem.points"></v-text-field>
+                <v-text-field :rules="[number => !!number || 'Number is required.']" 
+                label="Points Exchanged" v-model="editedItem.points"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-text-field label="Text Example" v-model="editedItem.text"></v-text-field>
@@ -71,6 +83,19 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="commentDialog" max-width="500px">
+        <v-container fluid>
+          <v-layout row>
+            <v-flex xs12>
+              <v-text-field
+                name="input-1"
+                label="Label Text"
+                textarea
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+        </v-container>
+    </v-dialog>
   </div>
 </template>
 
@@ -79,6 +104,7 @@
   export default {
     data: () => ({
       search: '',
+      commentDialog: false,
       dialog: false,
       headers: [],
       items: [],
@@ -87,14 +113,14 @@
         name: 'Team ' + 0,
         match: 'Match ' + 0,
         points: 0,
-        boolean: 0,
+        boolean: '???',
         text: 'none'
       },
       defaultItem: {
         name: 'Team ' + 0,
         match: 'Match ' + 0,
-        points: '',
-        boolean: 0,
+        points: 0,
+        boolean: '???',
         text: 'none'
       }
     }),
@@ -136,6 +162,12 @@
         this.editedIndex = this.items.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
+      },
+
+        comment (item) {
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.commentDialog = true
       },
 
       close () {
