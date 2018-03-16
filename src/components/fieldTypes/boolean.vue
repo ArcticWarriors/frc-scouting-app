@@ -3,12 +3,10 @@
     <v-flex xs4>
       <v-subheader>Did it Climb</v-subheader>
     </v-flex>
-    <v-flex xs8>
-      <v-radio-group v-model="row" row>
-        <v-radio label="Yea" value="radio-1" color="success" />
-        <v-radio label="Heck no" value="radio-2" color="error"/>
-      </v-radio-group>
-    </v-flex>
+          <v-flex xs4>
+            <v-select :items="['True','False']" label="Boolean" 
+          :rules="[text => !!text || 'Text is required.']" v-model="row"></v-select>
+          </v-flex>
   </v-layout>
 </template>
 

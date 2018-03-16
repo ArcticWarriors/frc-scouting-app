@@ -9,8 +9,8 @@
       <v-card-text>
         <v-container fluid>
           <FieldBoolean/>
-          <FieldText comments= 'props.item.name'/>
           <FieldText comments="get good"/>
+          <FieldTextXL comments="get gooder"/>
           <FieldNumber/>
         </v-container>
       </v-card-text>
@@ -27,6 +27,7 @@
 import FieldEntry from '@/components/FieldEntry';
 
 import FieldText from '@/components/fieldTypes/text';
+import FieldTextXL from '@/components/fieldTypes/textXL';
 import FieldNumber from '@/components/fieldTypes/number';
 import FieldBoolean from '@/components/fieldTypes/boolean';
 
@@ -39,7 +40,7 @@ export default {
     };
   },
   components: {
-    FieldText, FieldNumber, FieldBoolean,
+    FieldText, FieldTextXL, FieldNumber, FieldBoolean,
   },
   props: {
     team: {

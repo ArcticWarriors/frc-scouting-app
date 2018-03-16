@@ -17,18 +17,70 @@
       :search="search"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-left">{{ props.item.match }}</td>
-        <td class="text-xs-left">{{ props.item.boolean }}</td>
-        <td class="text-xs-left">{{ props.item.points }}</td>
-        <td class="text-xs-left">{{ props.item.text }}</td>
-        <td class="justify-left layout px-0">
-          <v-btn icon class="mx-0" @click="editItem(props.item)">
-            <v-icon color="teal">edit</v-icon>
-          </v-btn>
-          <v-btn icon class="mx-0" @click="comment(props.item)">
-          	<v-icon>info</v-icon>
-          </v-btn>
+         <td class="text-xs-left">
+          <v-edit-dialog
+          :return-value.sync="props.item.name"
+          lazy
+          > {{ props.item.name }}
+            <v-text-field
+              slot="input"
+              label="Edit"
+              v-model="props.item.name"
+              single-line
+              counter
+            ></v-text-field>
+          </v-edit-dialog>
+        </td>
+
+         <td class="text-xs-left">
+          <v-edit-dialog
+          :return-value.sync="props.item.match"
+          lazy
+          > {{ props.item.match }}
+            <v-text-field
+              slot="input"
+              label="Edit"
+              v-model="props.item.match"
+              single-line
+              counter
+            ></v-text-field>
+          </v-edit-dialog>
+        </td>
+
+         <td class="text-xs-left">
+            <v-select :items="['True','False']" label="Boolean" 
+                      v-model="props.item.boolean"></v-select>
+        </td>
+
+         <td class="text-xs-left">
+          <v-edit-dialog
+          :return-value.sync="props.item.points"
+          lazy
+          > {{ props.item.points }}
+            <v-text-field
+              slot="input"
+              label="Edit"
+              v-model="props.item.points"
+              single-line
+              counter
+            ></v-text-field>
+          </v-edit-dialog>
+        </td>
+
+         <td class="text-xs-left">
+          <v-edit-dialog
+          :return-value.sync="props.item.text"
+          lazy
+          > {{ props.item.text }}
+            <v-text-field
+              slot="input"
+              label="Edit"
+              v-model="props.item.text"
+              single-line
+              :counter="250"                
+              textarea              
+            ></v-text-field>
+          </v-edit-dialog>
         </td>
       </template>
       <template slot="expand" slot-scope="props">
@@ -40,102 +92,29 @@
         Your search for "{{ search }}" found no results.
       </v-alert>
     </v-data-table>
-    <v-dialog v-model="dialog" max-width="500px">
-      <v-btn color="primary" dark slot="activator" class="mb-2">New Item</v-btn>
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12 sm6 md4>
-                <v-text-field label="Team" v-model="editedItem.name"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field label="Match #" v-model="editedItem.match"></v-text-field>
-              </v-flex>
-
-			    <v-flex xs12>
-			      <v-subheader>Boolean</v-subheader>
-			    </v-flex>
-			    <v-flex xs12>
-      		<v-radio-group v-model="editedItem.boolean">
-        		<v-radio label="true" value="true" color="success" />
-        		<v-radio label="false" value="false" color="error"/>
-      		</v-radio-group>
-         		</v-flex>
-
-              <v-flex xs12 sm6 md4>
-                <v-text-field :rules="[number => !!number || 'Number is required.']" 
-                label="Points Exchanged" v-model="editedItem.points"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field label="Text Example" v-model="editedItem.text"></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="save">Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-dialog v-model="commentDialog" max-width="500px">
-        <v-container fluid>
-          <v-layout row>
-            <v-flex xs12>
-              <v-text-field
-                name="input-1"
-                label="Label Text"
-                textarea
-              ></v-text-field>
-            </v-flex>
-          </v-layout>
-        </v-container>
-    </v-dialog>
+    <v-btn color="primary" @click.native="newRow">New Row</v-btn>
   </div>
 </template>
 
 <script>
 
+
   export default {
     data: () => ({
       search: '',
-      commentDialog: false,
-      dialog: false,
       headers: [],
       items: [],
-      editedIndex: -1,
-      editedItem: {
-        name: 'Team ' + 0,
-        match: 'Match ' + 0,
-        points: 0,
-        boolean: '???',
-        text: 'none'
-      },
       defaultItem: {
         name: 'Team ' + 0,
         match: 'Match ' + 0,
         points: 0,
         boolean: '???',
-        text: 'none'
+        text: 'none',
       }
     }),
+    components:
+      {},
 
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-      }
-    },
-
-    watch: {
-      dialog (val) {
-        val || this.close()
-      }
-    },
 
     created () {
       this.initialize()
@@ -156,35 +135,15 @@
         { text: 'Text example', value: 'text' },
         { text: 'Actions', value: 'name', sortable: false }
         ]
+
+        this.items = [
+        { name:'Team 174', match: 'Match 17', boolean: 'true', points: 16, text: 'sub B'},
+        { name:'Team 175', match: 'Match 17', boolean: 'false', points: 0, text: 'get good'}
+        ]
       },
 
-      editItem (item) {
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-        comment (item) {
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.commentDialog = true
-      },
-
-      close () {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
+      newRow () {
+        this.items.push(this.defaultItem)
       }
     }
   }
