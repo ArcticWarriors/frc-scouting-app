@@ -1,9 +1,19 @@
 mutation {
-  createUser(data: {
+  dev: createUser(data: {
     email: "developer@example.com"
     password: "$2a$10$hACwQ5/HQI6FhbIISOUVeusy3sKyUDhSq36fF5d/54aAdiygJPFzm" # plaintext password: "nooneknows"
     name: "Dev"
-  }) {
-    id
-  }
+  }) { id }
+  
+  tba: createUser(data: {
+    email: "tba-api@localhost"
+    password: "" # Validated via the request coming from localhost
+    name: "TBA API"
+  }) { id }
+  
+  tbaST: createScoutTeam(data: {
+    members: {
+      connect:{ email: "tba-api@localhost" }
+    }}
+   ) { id }
 }

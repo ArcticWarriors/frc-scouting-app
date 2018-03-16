@@ -1,6 +1,7 @@
 const { GraphQLServer } = require('graphql-yoga');
 const { Prisma } = require('prisma-binding');
 const resolvers = require('./resolvers');
+const { updateTeams, updateMatches, webhookParser, webhookHandler } = require('./tba-api');
 
 const server = new GraphQLServer({
   typeDefs: 'src/schema.graphql',
@@ -14,9 +15,16 @@ const server = new GraphQLServer({
       // Taken from database/prisma.yml (value is set in .env)
       secret: process.env.PRISMA_SECRET,
       // Log all GraphQL queries & mutations
-      debug: process.env.NODE_ENV === 'dev',
+      // The TBA API updates make this unusable, turn this on by hand if required
+      debug: false,
     }),
   }),
 });
 
-server.start(() => console.log('Server is running on http://localhost:4000'));
+server.express.use('/tbaupdate', webhookParser);
+server.express.post('/tbaupdate', webhookHandler);
+
+server.start(() => {
+  console.log(`Server is running on port ${server.options.port}`);
+  updateTeams().then( () => updateMatches());
+});

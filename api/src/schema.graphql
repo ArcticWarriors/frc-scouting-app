@@ -1,12 +1,17 @@
-# import Role from "./generated/prisma.graphql"
+# import Role, TBAUpdateRecord, FieldType, TeamField, Team, Match, MatchLevel, Competition from "./generated/prisma.graphql"
 
 type Query {
   me: User
+  tbaUpdateRecord(endpoint: String!): TBAUpdateRecord
 }
 
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
+  upsertTBAUpdateRecord(endpoint: String!, lastModified: String!, lastResponse: String): TBAUpdateRecord!
+  upsertTBATeamData(fieldName: String!, type: FieldType!, value: String!, teamNumber: Int!): TeamField!
+  upsertTBACompetitionData(gameYear: Int!, regionalCode: String!, teamNumbers: [Int!]): Competition!
+  upsertTBAMatch(gameYear: Int!, regionalCode: String!, level: String!, number: Int!, blueNumbers: [Int!]!, redNumbers: [Int!]!): Match!
 }
 
 type AuthPayload {

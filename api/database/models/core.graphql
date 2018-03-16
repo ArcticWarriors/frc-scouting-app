@@ -1,0 +1,18 @@
+type Location {
+  address: String
+  city: String
+  state: String
+  country: String
+}
+
+type TBAUpdateRecord {
+  endpoint: String! @unique
+  lastResponse: String
+  lastModified: String!
+}
+
+enum FieldType {
+  NUMBER,
+  TEXT,
+  BOOLEAN,
+}

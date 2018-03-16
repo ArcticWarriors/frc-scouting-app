@@ -17,7 +17,14 @@ function getUserId(ctx) {
   throw new AuthError();
 }
 
+async function limitUser(ctx, email) {
+  const id = getUserId(ctx);
+  const user = await ctx.db.query.user({ where: { id } });
+  if (user.email !== email) throw new AuthError();
+}
+
 module.exports = {
-  getUserId,
   AuthError,
+  getUserId,
+  limitUser,
 };

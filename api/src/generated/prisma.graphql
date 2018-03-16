@@ -12,18 +12,6 @@ type Bookmark implements Node {
   grouping: String!
 }
 
-type Competition implements Node {
-  id: ID!
-  game(where: GameWhereInput): Game!
-  code: String!
-  name: String
-  startDate: DateTime
-  endDate: DateTime
-  location(where: LocationWhereInput): Location
-  webpage: String
-  teams(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team!]
-}
-
 type Image implements Node {
   id: ID!
   path: String!
@@ -35,34 +23,15 @@ type Image implements Node {
   updatedAt: DateTime!
 }
 
-type Match implements Node {
-  id: ID!
-  competition(where: CompetitionWhereInput): Competition!
-  number: Int!
-  level: CompetitionLevel!
-  teams(where: MatchPlacementWhereInput, orderBy: MatchPlacementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MatchPlacement!]
-  matchData(where: MatchDataWhereInput, orderBy: MatchDataOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MatchData!]
-}
-
 type MatchData implements Node {
   id: ID!
+  team(where: TeamWhereInput): Team
+  alliance: Alliance
   match(where: MatchWhereInput): Match!
   field(where: MatchFieldWhereInput): MatchField!
   value: String!
-  team(where: TeamWhereInput): Team
   owner(where: ScoutTeamWhereInput): ScoutTeam!
-  submitter(where: UserWhereInput): User!
   private: Boolean
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type MatchField implements Node {
-  id: ID!
-  name: String!
-  type: String!
-  official: Boolean!
-  owner(where: ScoutTeamWhereInput): ScoutTeam
   submitter(where: UserWhereInput): User!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -70,9 +39,9 @@ type MatchField implements Node {
 
 type MatchPlacement implements Node {
   id: ID!
-  team(where: TeamWhereInput): Team!
   match(where: MatchWhereInput): Match!
-  location: MatchLocation
+  team(where: TeamWhereInput): Team!
+  alliance: Alliance!
 }
 
 type Pick implements Node {
@@ -92,29 +61,6 @@ type ScoutTeam implements Node {
   matchFields(where: MatchFieldWhereInput, orderBy: MatchFieldOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MatchField!]
   matchData(where: MatchDataWhereInput, orderBy: MatchDataOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MatchData!]
   members(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
-}
-
-type TeamData implements Node {
-  id: ID!
-  team(where: TeamWhereInput): Team!
-  field(where: TeamFieldWhereInput): TeamField!
-  value: String!
-  owner(where: ScoutTeamWhereInput): ScoutTeam!
-  submitter(where: UserWhereInput): User!
-  private: Boolean
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type TeamField implements Node {
-  id: ID!
-  name: String!
-  type: String!
-  official: Boolean!
-  owner(where: ScoutTeamWhereInput): ScoutTeam
-  submitter(where: UserWhereInput): User!
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 type User implements Node {
@@ -175,6 +121,10 @@ type AggregateScoutTeam {
   count: Int!
 }
 
+type AggregateTBAUpdateRecord {
+  count: Int!
+}
+
 type AggregateTeam {
   count: Int!
 }
@@ -189,6 +139,11 @@ type AggregateTeamField {
 
 type AggregateUser {
   count: Int!
+}
+
+enum Alliance {
+  RED
+  BLUE
 }
 
 type BatchPayload {
@@ -290,6 +245,16 @@ input BookmarkWhereUniqueInput {
   id: ID
 }
 
+type Competition {
+  code: String!
+  name: String
+  startDate: DateTime
+  endDate: DateTime
+  location(where: LocationWhereInput): Location
+  webpage: String
+  teams(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team!]
+}
+
 type CompetitionConnection {
   pageInfo: PageInfo!
   edges: [CompetitionEdge]!
@@ -302,7 +267,6 @@ input CompetitionCreateInput {
   startDate: DateTime
   endDate: DateTime
   webpage: String
-  game: GameCreateOneInput!
   location: LocationCreateOneInput
   teams: TeamCreateManyWithoutCompetitionsInput
 }
@@ -323,7 +287,6 @@ input CompetitionCreateWithoutTeamsInput {
   startDate: DateTime
   endDate: DateTime
   webpage: String
-  game: GameCreateOneInput!
   location: LocationCreateOneInput
 }
 
@@ -332,18 +295,7 @@ type CompetitionEdge {
   cursor: String!
 }
 
-enum CompetitionLevel {
-  PR
-  QM
-  EF
-  QF
-  SF
-  F
-}
-
 enum CompetitionOrderByInput {
-  id_ASC
-  id_DESC
   code_ASC
   code_DESC
   name_ASC
@@ -354,6 +306,8 @@ enum CompetitionOrderByInput {
   endDate_DESC
   webpage_ASC
   webpage_DESC
+  id_ASC
+  id_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -361,7 +315,6 @@ enum CompetitionOrderByInput {
 }
 
 type CompetitionPreviousValues {
-  id: ID!
   code: String!
   name: String
   startDate: DateTime
@@ -392,7 +345,6 @@ input CompetitionUpdateInput {
   startDate: DateTime
   endDate: DateTime
   webpage: String
-  game: GameUpdateOneInput
   location: LocationUpdateOneInput
   teams: TeamUpdateManyWithoutCompetitionsInput
 }
@@ -419,7 +371,6 @@ input CompetitionUpdateWithoutTeamsDataInput {
   startDate: DateTime
   endDate: DateTime
   webpage: String
-  game: GameUpdateOneInput
   location: LocationUpdateOneInput
 }
 
@@ -437,20 +388,6 @@ input CompetitionUpsertWithoutTeamsInput {
 input CompetitionWhereInput {
   AND: [CompetitionWhereInput!]
   OR: [CompetitionWhereInput!]
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
   code: String
   code_not: String
   code_in: [String!]
@@ -509,7 +446,6 @@ input CompetitionWhereInput {
   webpage_not_starts_with: String
   webpage_ends_with: String
   webpage_not_ends_with: String
-  game: GameWhereInput
   location: LocationWhereInput
   teams_every: TeamWhereInput
   teams_some: TeamWhereInput
@@ -517,10 +453,16 @@ input CompetitionWhereInput {
 }
 
 input CompetitionWhereUniqueInput {
-  id: ID
+  code: String
 }
 
 scalar DateTime
+
+enum FieldType {
+  NUMBER
+  TEXT
+  BOOLEAN
+}
 
 type Game {
   year: Int!
@@ -536,11 +478,6 @@ type GameConnection {
 input GameCreateInput {
   year: Int!
   name: String
-}
-
-input GameCreateOneInput {
-  create: GameCreateInput
-  connect: GameWhereUniqueInput
 }
 
 type GameEdge {
@@ -586,13 +523,6 @@ input GameSubscriptionWhereInput {
 input GameUpdateInput {
   year: Int
   name: String
-}
-
-input GameUpdateOneInput {
-  create: GameCreateInput
-  connect: GameWhereUniqueInput
-  disconnect: GameWhereUniqueInput
-  delete: GameWhereUniqueInput
 }
 
 input GameWhereInput {
@@ -909,6 +839,12 @@ input LocationWhereInput {
 
 scalar Long
 
+type Match {
+  name: String!
+  teams(where: MatchPlacementWhereInput, orderBy: MatchPlacementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MatchPlacement!]
+  matchData(where: MatchDataWhereInput, orderBy: MatchDataOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MatchData!]
+}
+
 type MatchConnection {
   pageInfo: PageInfo!
   edges: [MatchEdge]!
@@ -916,9 +852,7 @@ type MatchConnection {
 }
 
 input MatchCreateInput {
-  number: Int!
-  level: CompetitionLevel!
-  competition: CompetitionCreateOneInput!
+  name: String!
   teams: MatchPlacementCreateManyWithoutMatchInput
   matchData: MatchDataCreateManyWithoutMatchInput
 }
@@ -934,16 +868,12 @@ input MatchCreateOneWithoutTeamsInput {
 }
 
 input MatchCreateWithoutMatchDataInput {
-  number: Int!
-  level: CompetitionLevel!
-  competition: CompetitionCreateOneInput!
+  name: String!
   teams: MatchPlacementCreateManyWithoutMatchInput
 }
 
 input MatchCreateWithoutTeamsInput {
-  number: Int!
-  level: CompetitionLevel!
-  competition: CompetitionCreateOneInput!
+  name: String!
   matchData: MatchDataCreateManyWithoutMatchInput
 }
 
@@ -954,11 +884,12 @@ type MatchDataConnection {
 }
 
 input MatchDataCreateInput {
+  alliance: Alliance
   value: String!
   private: Boolean
+  team: TeamCreateOneWithoutMatchDataInput
   match: MatchCreateOneWithoutMatchDataInput!
   field: MatchFieldCreateOneInput!
-  team: TeamCreateOneWithoutMatchDataInput
   owner: ScoutTeamCreateOneWithoutMatchDataInput!
   submitter: UserCreateOneInput!
 }
@@ -979,24 +910,27 @@ input MatchDataCreateManyWithoutTeamInput {
 }
 
 input MatchDataCreateWithoutMatchInput {
+  alliance: Alliance
   value: String!
   private: Boolean
-  field: MatchFieldCreateOneInput!
   team: TeamCreateOneWithoutMatchDataInput
+  field: MatchFieldCreateOneInput!
   owner: ScoutTeamCreateOneWithoutMatchDataInput!
   submitter: UserCreateOneInput!
 }
 
 input MatchDataCreateWithoutOwnerInput {
+  alliance: Alliance
   value: String!
   private: Boolean
+  team: TeamCreateOneWithoutMatchDataInput
   match: MatchCreateOneWithoutMatchDataInput!
   field: MatchFieldCreateOneInput!
-  team: TeamCreateOneWithoutMatchDataInput
   submitter: UserCreateOneInput!
 }
 
 input MatchDataCreateWithoutTeamInput {
+  alliance: Alliance
   value: String!
   private: Boolean
   match: MatchCreateOneWithoutMatchDataInput!
@@ -1013,6 +947,8 @@ type MatchDataEdge {
 enum MatchDataOrderByInput {
   id_ASC
   id_DESC
+  alliance_ASC
+  alliance_DESC
   value_ASC
   value_DESC
   private_ASC
@@ -1025,6 +961,7 @@ enum MatchDataOrderByInput {
 
 type MatchDataPreviousValues {
   id: ID!
+  alliance: Alliance
   value: String!
   private: Boolean
   createdAt: DateTime!
@@ -1049,11 +986,12 @@ input MatchDataSubscriptionWhereInput {
 }
 
 input MatchDataUpdateInput {
+  alliance: Alliance
   value: String
   private: Boolean
+  team: TeamUpdateOneWithoutMatchDataInput
   match: MatchUpdateOneWithoutMatchDataInput
   field: MatchFieldUpdateOneInput
-  team: TeamUpdateOneWithoutMatchDataInput
   owner: ScoutTeamUpdateOneWithoutMatchDataInput
   submitter: UserUpdateOneInput
 }
@@ -1086,10 +1024,11 @@ input MatchDataUpdateManyWithoutTeamInput {
 }
 
 input MatchDataUpdateWithoutMatchDataInput {
+  alliance: Alliance
   value: String
   private: Boolean
-  field: MatchFieldUpdateOneInput
   team: TeamUpdateOneWithoutMatchDataInput
+  field: MatchFieldUpdateOneInput
   owner: ScoutTeamUpdateOneWithoutMatchDataInput
   submitter: UserUpdateOneInput
 }
@@ -1100,11 +1039,12 @@ input MatchDataUpdateWithoutMatchInput {
 }
 
 input MatchDataUpdateWithoutOwnerDataInput {
+  alliance: Alliance
   value: String
   private: Boolean
+  team: TeamUpdateOneWithoutMatchDataInput
   match: MatchUpdateOneWithoutMatchDataInput
   field: MatchFieldUpdateOneInput
-  team: TeamUpdateOneWithoutMatchDataInput
   submitter: UserUpdateOneInput
 }
 
@@ -1114,6 +1054,7 @@ input MatchDataUpdateWithoutOwnerInput {
 }
 
 input MatchDataUpdateWithoutTeamDataInput {
+  alliance: Alliance
   value: String
   private: Boolean
   match: MatchUpdateOneWithoutMatchDataInput
@@ -1162,6 +1103,10 @@ input MatchDataWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  alliance: Alliance
+  alliance_not: Alliance
+  alliance_in: [Alliance!]
+  alliance_not_in: [Alliance!]
   value: String
   value_not: String
   value_in: [String!]
@@ -1194,9 +1139,9 @@ input MatchDataWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  team: TeamWhereInput
   match: MatchWhereInput
   field: MatchFieldWhereInput
-  team: TeamWhereInput
   owner: ScoutTeamWhereInput
   submitter: UserWhereInput
 }
@@ -1210,6 +1155,15 @@ type MatchEdge {
   cursor: String!
 }
 
+type MatchField {
+  name: String!
+  type: FieldType!
+  private: Boolean
+  submitter(where: UserWhereInput): User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type MatchFieldConnection {
   pageInfo: PageInfo!
   edges: [MatchFieldEdge]!
@@ -1218,14 +1172,13 @@ type MatchFieldConnection {
 
 input MatchFieldCreateInput {
   name: String!
-  type: String!
-  official: Boolean!
-  owner: ScoutTeamCreateOneWithoutMatchFieldsInput
+  type: FieldType!
+  private: Boolean
   submitter: UserCreateOneInput!
 }
 
-input MatchFieldCreateManyWithoutOwnerInput {
-  create: [MatchFieldCreateWithoutOwnerInput!]
+input MatchFieldCreateManyInput {
+  create: [MatchFieldCreateInput!]
   connect: [MatchFieldWhereUniqueInput!]
 }
 
@@ -1234,38 +1187,30 @@ input MatchFieldCreateOneInput {
   connect: MatchFieldWhereUniqueInput
 }
 
-input MatchFieldCreateWithoutOwnerInput {
-  name: String!
-  type: String!
-  official: Boolean!
-  submitter: UserCreateOneInput!
-}
-
 type MatchFieldEdge {
   node: MatchField!
   cursor: String!
 }
 
 enum MatchFieldOrderByInput {
-  id_ASC
-  id_DESC
   name_ASC
   name_DESC
   type_ASC
   type_DESC
-  official_ASC
-  official_DESC
+  private_ASC
+  private_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  id_ASC
+  id_DESC
 }
 
 type MatchFieldPreviousValues {
-  id: ID!
   name: String!
-  type: String!
-  official: Boolean!
+  type: FieldType!
+  private: Boolean
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1289,19 +1234,16 @@ input MatchFieldSubscriptionWhereInput {
 
 input MatchFieldUpdateInput {
   name: String
-  type: String
-  official: Boolean
-  owner: ScoutTeamUpdateOneWithoutMatchFieldsInput
+  type: FieldType
+  private: Boolean
   submitter: UserUpdateOneInput
 }
 
-input MatchFieldUpdateManyWithoutOwnerInput {
-  create: [MatchFieldCreateWithoutOwnerInput!]
+input MatchFieldUpdateManyInput {
+  create: [MatchFieldCreateInput!]
   connect: [MatchFieldWhereUniqueInput!]
   disconnect: [MatchFieldWhereUniqueInput!]
   delete: [MatchFieldWhereUniqueInput!]
-  update: [MatchFieldUpdateWithoutOwnerInput!]
-  upsert: [MatchFieldUpsertWithoutOwnerInput!]
 }
 
 input MatchFieldUpdateOneInput {
@@ -1311,41 +1253,9 @@ input MatchFieldUpdateOneInput {
   delete: MatchFieldWhereUniqueInput
 }
 
-input MatchFieldUpdateWithoutOwnerDataInput {
-  name: String
-  type: String
-  official: Boolean
-  submitter: UserUpdateOneInput
-}
-
-input MatchFieldUpdateWithoutOwnerInput {
-  where: MatchFieldWhereUniqueInput!
-  data: MatchFieldUpdateWithoutOwnerDataInput!
-}
-
-input MatchFieldUpsertWithoutOwnerInput {
-  where: MatchFieldWhereUniqueInput!
-  update: MatchFieldUpdateWithoutOwnerDataInput!
-  create: MatchFieldCreateWithoutOwnerInput!
-}
-
 input MatchFieldWhereInput {
   AND: [MatchFieldWhereInput!]
   OR: [MatchFieldWhereInput!]
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
   name: String
   name_not: String
   name_in: [String!]
@@ -1360,22 +1270,12 @@ input MatchFieldWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  type: String
-  type_not: String
-  type_in: [String!]
-  type_not_in: [String!]
-  type_lt: String
-  type_lte: String
-  type_gt: String
-  type_gte: String
-  type_contains: String
-  type_not_contains: String
-  type_starts_with: String
-  type_not_starts_with: String
-  type_ends_with: String
-  type_not_ends_with: String
-  official: Boolean
-  official_not: Boolean
+  type: FieldType
+  type_not: FieldType
+  type_in: [FieldType!]
+  type_not_in: [FieldType!]
+  private: Boolean
+  private_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -1392,30 +1292,18 @@ input MatchFieldWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  owner: ScoutTeamWhereInput
   submitter: UserWhereInput
 }
 
 input MatchFieldWhereUniqueInput {
-  id: ID
-}
-
-enum MatchLocation {
-  RED1
-  RED2
-  RED3
-  BLUE1
-  BLUE2
-  BLUE3
+  name: String
 }
 
 enum MatchOrderByInput {
+  name_ASC
+  name_DESC
   id_ASC
   id_DESC
-  number_ASC
-  number_DESC
-  level_ASC
-  level_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1429,9 +1317,9 @@ type MatchPlacementConnection {
 }
 
 input MatchPlacementCreateInput {
-  location: MatchLocation
-  team: TeamCreateOneWithoutMatchesInput!
+  alliance: Alliance!
   match: MatchCreateOneWithoutTeamsInput!
+  team: TeamCreateOneWithoutMatchesInput!
 }
 
 input MatchPlacementCreateManyWithoutMatchInput {
@@ -1445,12 +1333,12 @@ input MatchPlacementCreateManyWithoutTeamInput {
 }
 
 input MatchPlacementCreateWithoutMatchInput {
-  location: MatchLocation
+  alliance: Alliance!
   team: TeamCreateOneWithoutMatchesInput!
 }
 
 input MatchPlacementCreateWithoutTeamInput {
-  location: MatchLocation
+  alliance: Alliance!
   match: MatchCreateOneWithoutTeamsInput!
 }
 
@@ -1462,8 +1350,8 @@ type MatchPlacementEdge {
 enum MatchPlacementOrderByInput {
   id_ASC
   id_DESC
-  location_ASC
-  location_DESC
+  alliance_ASC
+  alliance_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1472,7 +1360,7 @@ enum MatchPlacementOrderByInput {
 
 type MatchPlacementPreviousValues {
   id: ID!
-  location: MatchLocation
+  alliance: Alliance!
 }
 
 type MatchPlacementSubscriptionPayload {
@@ -1493,9 +1381,9 @@ input MatchPlacementSubscriptionWhereInput {
 }
 
 input MatchPlacementUpdateInput {
-  location: MatchLocation
-  team: TeamUpdateOneWithoutMatchesInput
+  alliance: Alliance
   match: MatchUpdateOneWithoutTeamsInput
+  team: TeamUpdateOneWithoutMatchesInput
 }
 
 input MatchPlacementUpdateManyWithoutMatchInput {
@@ -1517,7 +1405,7 @@ input MatchPlacementUpdateManyWithoutTeamInput {
 }
 
 input MatchPlacementUpdateWithoutMatchDataInput {
-  location: MatchLocation
+  alliance: Alliance
   team: TeamUpdateOneWithoutMatchesInput
 }
 
@@ -1527,7 +1415,7 @@ input MatchPlacementUpdateWithoutMatchInput {
 }
 
 input MatchPlacementUpdateWithoutTeamDataInput {
-  location: MatchLocation
+  alliance: Alliance
   match: MatchUpdateOneWithoutTeamsInput
 }
 
@@ -1565,12 +1453,12 @@ input MatchPlacementWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  location: MatchLocation
-  location_not: MatchLocation
-  location_in: [MatchLocation!]
-  location_not_in: [MatchLocation!]
-  team: TeamWhereInput
+  alliance: Alliance
+  alliance_not: Alliance
+  alliance_in: [Alliance!]
+  alliance_not_in: [Alliance!]
   match: MatchWhereInput
+  team: TeamWhereInput
 }
 
 input MatchPlacementWhereUniqueInput {
@@ -1578,9 +1466,7 @@ input MatchPlacementWhereUniqueInput {
 }
 
 type MatchPreviousValues {
-  id: ID!
-  number: Int!
-  level: CompetitionLevel!
+  name: String!
 }
 
 type MatchSubscriptionPayload {
@@ -1601,9 +1487,7 @@ input MatchSubscriptionWhereInput {
 }
 
 input MatchUpdateInput {
-  number: Int
-  level: CompetitionLevel
-  competition: CompetitionUpdateOneInput
+  name: String
   teams: MatchPlacementUpdateManyWithoutMatchInput
   matchData: MatchDataUpdateManyWithoutMatchInput
 }
@@ -1627,9 +1511,7 @@ input MatchUpdateOneWithoutTeamsInput {
 }
 
 input MatchUpdateWithoutMatchDataDataInput {
-  number: Int
-  level: CompetitionLevel
-  competition: CompetitionUpdateOneInput
+  name: String
   teams: MatchPlacementUpdateManyWithoutMatchInput
 }
 
@@ -1639,9 +1521,7 @@ input MatchUpdateWithoutMatchDataInput {
 }
 
 input MatchUpdateWithoutTeamsDataInput {
-  number: Int
-  level: CompetitionLevel
-  competition: CompetitionUpdateOneInput
+  name: String
   matchData: MatchDataUpdateManyWithoutMatchInput
 }
 
@@ -1665,33 +1545,20 @@ input MatchUpsertWithoutTeamsInput {
 input MatchWhereInput {
   AND: [MatchWhereInput!]
   OR: [MatchWhereInput!]
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  number: Int
-  number_not: Int
-  number_in: [Int!]
-  number_not_in: [Int!]
-  number_lt: Int
-  number_lte: Int
-  number_gt: Int
-  number_gte: Int
-  level: CompetitionLevel
-  level_not: CompetitionLevel
-  level_in: [CompetitionLevel!]
-  level_not_in: [CompetitionLevel!]
-  competition: CompetitionWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
   teams_every: MatchPlacementWhereInput
   teams_some: MatchPlacementWhereInput
   teams_none: MatchPlacementWhereInput
@@ -1701,11 +1568,12 @@ input MatchWhereInput {
 }
 
 input MatchWhereUniqueInput {
-  id: ID
+  name: String
 }
 
 type Mutation {
   createLocation(data: LocationCreateInput!): Location!
+  createTBAUpdateRecord(data: TBAUpdateRecordCreateInput!): TBAUpdateRecord!
   createUser(data: UserCreateInput!): User!
   createScoutTeam(data: ScoutTeamCreateInput!): ScoutTeam!
   createBookmark(data: BookmarkCreateInput!): Bookmark!
@@ -1720,6 +1588,7 @@ type Mutation {
   createMatchData(data: MatchDataCreateInput!): MatchData!
   createMatchPlacement(data: MatchPlacementCreateInput!): MatchPlacement!
   createMatch(data: MatchCreateInput!): Match!
+  updateTBAUpdateRecord(data: TBAUpdateRecordUpdateInput!, where: TBAUpdateRecordWhereUniqueInput!): TBAUpdateRecord
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateScoutTeam(data: ScoutTeamUpdateInput!, where: ScoutTeamWhereUniqueInput!): ScoutTeam
   updateBookmark(data: BookmarkUpdateInput!, where: BookmarkWhereUniqueInput!): Bookmark
@@ -1734,6 +1603,7 @@ type Mutation {
   updateMatchData(data: MatchDataUpdateInput!, where: MatchDataWhereUniqueInput!): MatchData
   updateMatchPlacement(data: MatchPlacementUpdateInput!, where: MatchPlacementWhereUniqueInput!): MatchPlacement
   updateMatch(data: MatchUpdateInput!, where: MatchWhereUniqueInput!): Match
+  deleteTBAUpdateRecord(where: TBAUpdateRecordWhereUniqueInput!): TBAUpdateRecord
   deleteUser(where: UserWhereUniqueInput!): User
   deleteScoutTeam(where: ScoutTeamWhereUniqueInput!): ScoutTeam
   deleteBookmark(where: BookmarkWhereUniqueInput!): Bookmark
@@ -1748,6 +1618,7 @@ type Mutation {
   deleteMatchData(where: MatchDataWhereUniqueInput!): MatchData
   deleteMatchPlacement(where: MatchPlacementWhereUniqueInput!): MatchPlacement
   deleteMatch(where: MatchWhereUniqueInput!): Match
+  upsertTBAUpdateRecord(where: TBAUpdateRecordWhereUniqueInput!, create: TBAUpdateRecordCreateInput!, update: TBAUpdateRecordUpdateInput!): TBAUpdateRecord!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertScoutTeam(where: ScoutTeamWhereUniqueInput!, create: ScoutTeamCreateInput!, update: ScoutTeamUpdateInput!): ScoutTeam!
   upsertBookmark(where: BookmarkWhereUniqueInput!, create: BookmarkCreateInput!, update: BookmarkUpdateInput!): Bookmark!
@@ -1763,6 +1634,7 @@ type Mutation {
   upsertMatchPlacement(where: MatchPlacementWhereUniqueInput!, create: MatchPlacementCreateInput!, update: MatchPlacementUpdateInput!): MatchPlacement!
   upsertMatch(where: MatchWhereUniqueInput!, create: MatchCreateInput!, update: MatchUpdateInput!): Match!
   updateManyLocations(data: LocationUpdateInput!, where: LocationWhereInput!): BatchPayload!
+  updateManyTBAUpdateRecords(data: TBAUpdateRecordUpdateInput!, where: TBAUpdateRecordWhereInput!): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput!): BatchPayload!
   updateManyScoutTeams(data: ScoutTeamUpdateInput!, where: ScoutTeamWhereInput!): BatchPayload!
   updateManyBookmarks(data: BookmarkUpdateInput!, where: BookmarkWhereInput!): BatchPayload!
@@ -1778,6 +1650,7 @@ type Mutation {
   updateManyMatchPlacements(data: MatchPlacementUpdateInput!, where: MatchPlacementWhereInput!): BatchPayload!
   updateManyMatches(data: MatchUpdateInput!, where: MatchWhereInput!): BatchPayload!
   deleteManyLocations(where: LocationWhereInput!): BatchPayload!
+  deleteManyTBAUpdateRecords(where: TBAUpdateRecordWhereInput!): BatchPayload!
   deleteManyUsers(where: UserWhereInput!): BatchPayload!
   deleteManyScoutTeams(where: ScoutTeamWhereInput!): BatchPayload!
   deleteManyBookmarks(where: BookmarkWhereInput!): BatchPayload!
@@ -1924,6 +1797,7 @@ input PickWhereUniqueInput {
 
 type Query {
   locations(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Location]!
+  tBAUpdateRecords(where: TBAUpdateRecordWhereInput, orderBy: TBAUpdateRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TBAUpdateRecord]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   scoutTeams(where: ScoutTeamWhereInput, orderBy: ScoutTeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ScoutTeam]!
   bookmarks(where: BookmarkWhereInput, orderBy: BookmarkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bookmark]!
@@ -1938,6 +1812,7 @@ type Query {
   matchDatas(where: MatchDataWhereInput, orderBy: MatchDataOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MatchData]!
   matchPlacements(where: MatchPlacementWhereInput, orderBy: MatchPlacementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MatchPlacement]!
   matches(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match]!
+  tBAUpdateRecord(where: TBAUpdateRecordWhereUniqueInput!): TBAUpdateRecord
   user(where: UserWhereUniqueInput!): User
   scoutTeam(where: ScoutTeamWhereUniqueInput!): ScoutTeam
   bookmark(where: BookmarkWhereUniqueInput!): Bookmark
@@ -1953,6 +1828,7 @@ type Query {
   matchPlacement(where: MatchPlacementWhereUniqueInput!): MatchPlacement
   match(where: MatchWhereUniqueInput!): Match
   locationsConnection(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LocationConnection!
+  tBAUpdateRecordsConnection(where: TBAUpdateRecordWhereInput, orderBy: TBAUpdateRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TBAUpdateRecordConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   scoutTeamsConnection(where: ScoutTeamWhereInput, orderBy: ScoutTeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ScoutTeamConnection!
   bookmarksConnection(where: BookmarkWhereInput, orderBy: BookmarkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BookmarkConnection!
@@ -1988,9 +1864,9 @@ type ScoutTeamConnection {
 
 input ScoutTeamCreateInput {
   affiliation: TeamCreateOneInput
-  teamFields: TeamFieldCreateManyWithoutOwnerInput
+  teamFields: TeamFieldCreateManyInput
   teamData: TeamDataCreateManyWithoutOwnerInput
-  matchFields: MatchFieldCreateManyWithoutOwnerInput
+  matchFields: MatchFieldCreateManyInput
   matchData: MatchDataCreateManyWithoutOwnerInput
   members: UserCreateManyWithoutScoutTeamInput
 }
@@ -2005,11 +1881,6 @@ input ScoutTeamCreateOneWithoutMatchDataInput {
   connect: ScoutTeamWhereUniqueInput
 }
 
-input ScoutTeamCreateOneWithoutMatchFieldsInput {
-  create: ScoutTeamCreateWithoutMatchFieldsInput
-  connect: ScoutTeamWhereUniqueInput
-}
-
 input ScoutTeamCreateOneWithoutMembersInput {
   create: ScoutTeamCreateWithoutMembersInput
   connect: ScoutTeamWhereUniqueInput
@@ -2020,47 +1891,26 @@ input ScoutTeamCreateOneWithoutTeamDataInput {
   connect: ScoutTeamWhereUniqueInput
 }
 
-input ScoutTeamCreateOneWithoutTeamFieldsInput {
-  create: ScoutTeamCreateWithoutTeamFieldsInput
-  connect: ScoutTeamWhereUniqueInput
-}
-
 input ScoutTeamCreateWithoutMatchDataInput {
   affiliation: TeamCreateOneInput
-  teamFields: TeamFieldCreateManyWithoutOwnerInput
+  teamFields: TeamFieldCreateManyInput
   teamData: TeamDataCreateManyWithoutOwnerInput
-  matchFields: MatchFieldCreateManyWithoutOwnerInput
-  members: UserCreateManyWithoutScoutTeamInput
-}
-
-input ScoutTeamCreateWithoutMatchFieldsInput {
-  affiliation: TeamCreateOneInput
-  teamFields: TeamFieldCreateManyWithoutOwnerInput
-  teamData: TeamDataCreateManyWithoutOwnerInput
-  matchData: MatchDataCreateManyWithoutOwnerInput
+  matchFields: MatchFieldCreateManyInput
   members: UserCreateManyWithoutScoutTeamInput
 }
 
 input ScoutTeamCreateWithoutMembersInput {
   affiliation: TeamCreateOneInput
-  teamFields: TeamFieldCreateManyWithoutOwnerInput
+  teamFields: TeamFieldCreateManyInput
   teamData: TeamDataCreateManyWithoutOwnerInput
-  matchFields: MatchFieldCreateManyWithoutOwnerInput
+  matchFields: MatchFieldCreateManyInput
   matchData: MatchDataCreateManyWithoutOwnerInput
 }
 
 input ScoutTeamCreateWithoutTeamDataInput {
   affiliation: TeamCreateOneInput
-  teamFields: TeamFieldCreateManyWithoutOwnerInput
-  matchFields: MatchFieldCreateManyWithoutOwnerInput
-  matchData: MatchDataCreateManyWithoutOwnerInput
-  members: UserCreateManyWithoutScoutTeamInput
-}
-
-input ScoutTeamCreateWithoutTeamFieldsInput {
-  affiliation: TeamCreateOneInput
-  teamData: TeamDataCreateManyWithoutOwnerInput
-  matchFields: MatchFieldCreateManyWithoutOwnerInput
+  teamFields: TeamFieldCreateManyInput
+  matchFields: MatchFieldCreateManyInput
   matchData: MatchDataCreateManyWithoutOwnerInput
   members: UserCreateManyWithoutScoutTeamInput
 }
@@ -2102,9 +1952,9 @@ input ScoutTeamSubscriptionWhereInput {
 
 input ScoutTeamUpdateInput {
   affiliation: TeamUpdateOneInput
-  teamFields: TeamFieldUpdateManyWithoutOwnerInput
+  teamFields: TeamFieldUpdateManyInput
   teamData: TeamDataUpdateManyWithoutOwnerInput
-  matchFields: MatchFieldUpdateManyWithoutOwnerInput
+  matchFields: MatchFieldUpdateManyInput
   matchData: MatchDataUpdateManyWithoutOwnerInput
   members: UserUpdateManyWithoutScoutTeamInput
 }
@@ -2125,15 +1975,6 @@ input ScoutTeamUpdateOneWithoutMatchDataInput {
   upsert: ScoutTeamUpsertWithoutMatchDataInput
 }
 
-input ScoutTeamUpdateOneWithoutMatchFieldsInput {
-  create: ScoutTeamCreateWithoutMatchFieldsInput
-  connect: ScoutTeamWhereUniqueInput
-  disconnect: ScoutTeamWhereUniqueInput
-  delete: ScoutTeamWhereUniqueInput
-  update: ScoutTeamUpdateWithoutMatchFieldsInput
-  upsert: ScoutTeamUpsertWithoutMatchFieldsInput
-}
-
 input ScoutTeamUpdateOneWithoutMembersInput {
   create: ScoutTeamCreateWithoutMembersInput
   connect: ScoutTeamWhereUniqueInput
@@ -2152,20 +1993,11 @@ input ScoutTeamUpdateOneWithoutTeamDataInput {
   upsert: ScoutTeamUpsertWithoutTeamDataInput
 }
 
-input ScoutTeamUpdateOneWithoutTeamFieldsInput {
-  create: ScoutTeamCreateWithoutTeamFieldsInput
-  connect: ScoutTeamWhereUniqueInput
-  disconnect: ScoutTeamWhereUniqueInput
-  delete: ScoutTeamWhereUniqueInput
-  update: ScoutTeamUpdateWithoutTeamFieldsInput
-  upsert: ScoutTeamUpsertWithoutTeamFieldsInput
-}
-
 input ScoutTeamUpdateWithoutMatchDataDataInput {
   affiliation: TeamUpdateOneInput
-  teamFields: TeamFieldUpdateManyWithoutOwnerInput
+  teamFields: TeamFieldUpdateManyInput
   teamData: TeamDataUpdateManyWithoutOwnerInput
-  matchFields: MatchFieldUpdateManyWithoutOwnerInput
+  matchFields: MatchFieldUpdateManyInput
   members: UserUpdateManyWithoutScoutTeamInput
 }
 
@@ -2174,24 +2006,11 @@ input ScoutTeamUpdateWithoutMatchDataInput {
   data: ScoutTeamUpdateWithoutMatchDataDataInput!
 }
 
-input ScoutTeamUpdateWithoutMatchFieldsDataInput {
-  affiliation: TeamUpdateOneInput
-  teamFields: TeamFieldUpdateManyWithoutOwnerInput
-  teamData: TeamDataUpdateManyWithoutOwnerInput
-  matchData: MatchDataUpdateManyWithoutOwnerInput
-  members: UserUpdateManyWithoutScoutTeamInput
-}
-
-input ScoutTeamUpdateWithoutMatchFieldsInput {
-  where: ScoutTeamWhereUniqueInput!
-  data: ScoutTeamUpdateWithoutMatchFieldsDataInput!
-}
-
 input ScoutTeamUpdateWithoutMembersDataInput {
   affiliation: TeamUpdateOneInput
-  teamFields: TeamFieldUpdateManyWithoutOwnerInput
+  teamFields: TeamFieldUpdateManyInput
   teamData: TeamDataUpdateManyWithoutOwnerInput
-  matchFields: MatchFieldUpdateManyWithoutOwnerInput
+  matchFields: MatchFieldUpdateManyInput
   matchData: MatchDataUpdateManyWithoutOwnerInput
 }
 
@@ -2202,8 +2021,8 @@ input ScoutTeamUpdateWithoutMembersInput {
 
 input ScoutTeamUpdateWithoutTeamDataDataInput {
   affiliation: TeamUpdateOneInput
-  teamFields: TeamFieldUpdateManyWithoutOwnerInput
-  matchFields: MatchFieldUpdateManyWithoutOwnerInput
+  teamFields: TeamFieldUpdateManyInput
+  matchFields: MatchFieldUpdateManyInput
   matchData: MatchDataUpdateManyWithoutOwnerInput
   members: UserUpdateManyWithoutScoutTeamInput
 }
@@ -2213,29 +2032,10 @@ input ScoutTeamUpdateWithoutTeamDataInput {
   data: ScoutTeamUpdateWithoutTeamDataDataInput!
 }
 
-input ScoutTeamUpdateWithoutTeamFieldsDataInput {
-  affiliation: TeamUpdateOneInput
-  teamData: TeamDataUpdateManyWithoutOwnerInput
-  matchFields: MatchFieldUpdateManyWithoutOwnerInput
-  matchData: MatchDataUpdateManyWithoutOwnerInput
-  members: UserUpdateManyWithoutScoutTeamInput
-}
-
-input ScoutTeamUpdateWithoutTeamFieldsInput {
-  where: ScoutTeamWhereUniqueInput!
-  data: ScoutTeamUpdateWithoutTeamFieldsDataInput!
-}
-
 input ScoutTeamUpsertWithoutMatchDataInput {
   where: ScoutTeamWhereUniqueInput!
   update: ScoutTeamUpdateWithoutMatchDataDataInput!
   create: ScoutTeamCreateWithoutMatchDataInput!
-}
-
-input ScoutTeamUpsertWithoutMatchFieldsInput {
-  where: ScoutTeamWhereUniqueInput!
-  update: ScoutTeamUpdateWithoutMatchFieldsDataInput!
-  create: ScoutTeamCreateWithoutMatchFieldsInput!
 }
 
 input ScoutTeamUpsertWithoutMembersInput {
@@ -2248,12 +2048,6 @@ input ScoutTeamUpsertWithoutTeamDataInput {
   where: ScoutTeamWhereUniqueInput!
   update: ScoutTeamUpdateWithoutTeamDataDataInput!
   create: ScoutTeamCreateWithoutTeamDataInput!
-}
-
-input ScoutTeamUpsertWithoutTeamFieldsInput {
-  where: ScoutTeamWhereUniqueInput!
-  update: ScoutTeamUpdateWithoutTeamFieldsDataInput!
-  create: ScoutTeamCreateWithoutTeamFieldsInput!
 }
 
 input ScoutTeamWhereInput {
@@ -2297,6 +2091,7 @@ input ScoutTeamWhereUniqueInput {
 
 type Subscription {
   location(where: LocationSubscriptionWhereInput): LocationSubscriptionPayload
+  tBAUpdateRecord(where: TBAUpdateRecordSubscriptionWhereInput): TBAUpdateRecordSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   scoutTeam(where: ScoutTeamSubscriptionWhereInput): ScoutTeamSubscriptionPayload
   bookmark(where: BookmarkSubscriptionWhereInput): BookmarkSubscriptionPayload
@@ -2311,6 +2106,124 @@ type Subscription {
   matchData(where: MatchDataSubscriptionWhereInput): MatchDataSubscriptionPayload
   matchPlacement(where: MatchPlacementSubscriptionWhereInput): MatchPlacementSubscriptionPayload
   match(where: MatchSubscriptionWhereInput): MatchSubscriptionPayload
+}
+
+type TBAUpdateRecord {
+  endpoint: String!
+  lastResponse: String
+  lastModified: String!
+}
+
+type TBAUpdateRecordConnection {
+  pageInfo: PageInfo!
+  edges: [TBAUpdateRecordEdge]!
+  aggregate: AggregateTBAUpdateRecord!
+}
+
+input TBAUpdateRecordCreateInput {
+  endpoint: String!
+  lastResponse: String
+  lastModified: String!
+}
+
+type TBAUpdateRecordEdge {
+  node: TBAUpdateRecord!
+  cursor: String!
+}
+
+enum TBAUpdateRecordOrderByInput {
+  endpoint_ASC
+  endpoint_DESC
+  lastResponse_ASC
+  lastResponse_DESC
+  lastModified_ASC
+  lastModified_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type TBAUpdateRecordPreviousValues {
+  endpoint: String!
+  lastResponse: String
+  lastModified: String!
+}
+
+type TBAUpdateRecordSubscriptionPayload {
+  mutation: MutationType!
+  node: TBAUpdateRecord
+  updatedFields: [String!]
+  previousValues: TBAUpdateRecordPreviousValues
+}
+
+input TBAUpdateRecordSubscriptionWhereInput {
+  AND: [TBAUpdateRecordSubscriptionWhereInput!]
+  OR: [TBAUpdateRecordSubscriptionWhereInput!]
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TBAUpdateRecordWhereInput
+}
+
+input TBAUpdateRecordUpdateInput {
+  endpoint: String
+  lastResponse: String
+  lastModified: String
+}
+
+input TBAUpdateRecordWhereInput {
+  AND: [TBAUpdateRecordWhereInput!]
+  OR: [TBAUpdateRecordWhereInput!]
+  endpoint: String
+  endpoint_not: String
+  endpoint_in: [String!]
+  endpoint_not_in: [String!]
+  endpoint_lt: String
+  endpoint_lte: String
+  endpoint_gt: String
+  endpoint_gte: String
+  endpoint_contains: String
+  endpoint_not_contains: String
+  endpoint_starts_with: String
+  endpoint_not_starts_with: String
+  endpoint_ends_with: String
+  endpoint_not_ends_with: String
+  lastResponse: String
+  lastResponse_not: String
+  lastResponse_in: [String!]
+  lastResponse_not_in: [String!]
+  lastResponse_lt: String
+  lastResponse_lte: String
+  lastResponse_gt: String
+  lastResponse_gte: String
+  lastResponse_contains: String
+  lastResponse_not_contains: String
+  lastResponse_starts_with: String
+  lastResponse_not_starts_with: String
+  lastResponse_ends_with: String
+  lastResponse_not_ends_with: String
+  lastModified: String
+  lastModified_not: String
+  lastModified_in: [String!]
+  lastModified_not_in: [String!]
+  lastModified_lt: String
+  lastModified_lte: String
+  lastModified_gt: String
+  lastModified_gte: String
+  lastModified_contains: String
+  lastModified_not_contains: String
+  lastModified_starts_with: String
+  lastModified_not_starts_with: String
+  lastModified_ends_with: String
+  lastModified_not_ends_with: String
+}
+
+input TBAUpdateRecordWhereUniqueInput {
+  endpoint: String
 }
 
 type Team {
@@ -2331,7 +2244,7 @@ input TeamCreateInput {
   number: Int!
   competitions: CompetitionCreateManyWithoutTeamsInput
   matches: MatchPlacementCreateManyWithoutTeamInput
-  teamData: TeamDataCreateManyWithoutTeamInput
+  teamData: TeamDataCreateManyInput
   matchData: MatchDataCreateManyWithoutTeamInput
 }
 
@@ -2355,15 +2268,10 @@ input TeamCreateOneWithoutMatchesInput {
   connect: TeamWhereUniqueInput
 }
 
-input TeamCreateOneWithoutTeamDataInput {
-  create: TeamCreateWithoutTeamDataInput
-  connect: TeamWhereUniqueInput
-}
-
 input TeamCreateWithoutCompetitionsInput {
   number: Int!
   matches: MatchPlacementCreateManyWithoutTeamInput
-  teamData: TeamDataCreateManyWithoutTeamInput
+  teamData: TeamDataCreateManyInput
   matchData: MatchDataCreateManyWithoutTeamInput
 }
 
@@ -2371,21 +2279,24 @@ input TeamCreateWithoutMatchDataInput {
   number: Int!
   competitions: CompetitionCreateManyWithoutTeamsInput
   matches: MatchPlacementCreateManyWithoutTeamInput
-  teamData: TeamDataCreateManyWithoutTeamInput
+  teamData: TeamDataCreateManyInput
 }
 
 input TeamCreateWithoutMatchesInput {
   number: Int!
   competitions: CompetitionCreateManyWithoutTeamsInput
-  teamData: TeamDataCreateManyWithoutTeamInput
+  teamData: TeamDataCreateManyInput
   matchData: MatchDataCreateManyWithoutTeamInput
 }
 
-input TeamCreateWithoutTeamDataInput {
-  number: Int!
-  competitions: CompetitionCreateManyWithoutTeamsInput
-  matches: MatchPlacementCreateManyWithoutTeamInput
-  matchData: MatchDataCreateManyWithoutTeamInput
+type TeamData {
+  name: String!
+  value: String!
+  owner(where: ScoutTeamWhereInput): ScoutTeam
+  private: Boolean
+  submitter(where: UserWhereInput): User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type TeamDataConnection {
@@ -2395,12 +2306,16 @@ type TeamDataConnection {
 }
 
 input TeamDataCreateInput {
+  name: String!
   value: String!
   private: Boolean
-  team: TeamCreateOneWithoutTeamDataInput!
-  field: TeamFieldCreateOneInput!
-  owner: ScoutTeamCreateOneWithoutTeamDataInput!
+  owner: ScoutTeamCreateOneWithoutTeamDataInput
   submitter: UserCreateOneInput!
+}
+
+input TeamDataCreateManyInput {
+  create: [TeamDataCreateInput!]
+  connect: [TeamDataWhereUniqueInput!]
 }
 
 input TeamDataCreateManyWithoutOwnerInput {
@@ -2408,24 +2323,10 @@ input TeamDataCreateManyWithoutOwnerInput {
   connect: [TeamDataWhereUniqueInput!]
 }
 
-input TeamDataCreateManyWithoutTeamInput {
-  create: [TeamDataCreateWithoutTeamInput!]
-  connect: [TeamDataWhereUniqueInput!]
-}
-
 input TeamDataCreateWithoutOwnerInput {
+  name: String!
   value: String!
   private: Boolean
-  team: TeamCreateOneWithoutTeamDataInput!
-  field: TeamFieldCreateOneInput!
-  submitter: UserCreateOneInput!
-}
-
-input TeamDataCreateWithoutTeamInput {
-  value: String!
-  private: Boolean
-  field: TeamFieldCreateOneInput!
-  owner: ScoutTeamCreateOneWithoutTeamDataInput!
   submitter: UserCreateOneInput!
 }
 
@@ -2435,8 +2336,8 @@ type TeamDataEdge {
 }
 
 enum TeamDataOrderByInput {
-  id_ASC
-  id_DESC
+  name_ASC
+  name_DESC
   value_ASC
   value_DESC
   private_ASC
@@ -2445,10 +2346,12 @@ enum TeamDataOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  id_ASC
+  id_DESC
 }
 
 type TeamDataPreviousValues {
-  id: ID!
+  name: String!
   value: String!
   private: Boolean
   createdAt: DateTime!
@@ -2473,12 +2376,18 @@ input TeamDataSubscriptionWhereInput {
 }
 
 input TeamDataUpdateInput {
+  name: String
   value: String
   private: Boolean
-  team: TeamUpdateOneWithoutTeamDataInput
-  field: TeamFieldUpdateOneInput
   owner: ScoutTeamUpdateOneWithoutTeamDataInput
   submitter: UserUpdateOneInput
+}
+
+input TeamDataUpdateManyInput {
+  create: [TeamDataCreateInput!]
+  connect: [TeamDataWhereUniqueInput!]
+  disconnect: [TeamDataWhereUniqueInput!]
+  delete: [TeamDataWhereUniqueInput!]
 }
 
 input TeamDataUpdateManyWithoutOwnerInput {
@@ -2490,20 +2399,10 @@ input TeamDataUpdateManyWithoutOwnerInput {
   upsert: [TeamDataUpsertWithoutOwnerInput!]
 }
 
-input TeamDataUpdateManyWithoutTeamInput {
-  create: [TeamDataCreateWithoutTeamInput!]
-  connect: [TeamDataWhereUniqueInput!]
-  disconnect: [TeamDataWhereUniqueInput!]
-  delete: [TeamDataWhereUniqueInput!]
-  update: [TeamDataUpdateWithoutTeamInput!]
-  upsert: [TeamDataUpsertWithoutTeamInput!]
-}
-
 input TeamDataUpdateWithoutOwnerDataInput {
+  name: String
   value: String
   private: Boolean
-  team: TeamUpdateOneWithoutTeamDataInput
-  field: TeamFieldUpdateOneInput
   submitter: UserUpdateOneInput
 }
 
@@ -2512,48 +2411,29 @@ input TeamDataUpdateWithoutOwnerInput {
   data: TeamDataUpdateWithoutOwnerDataInput!
 }
 
-input TeamDataUpdateWithoutTeamDataInput {
-  value: String
-  private: Boolean
-  field: TeamFieldUpdateOneInput
-  owner: ScoutTeamUpdateOneWithoutTeamDataInput
-  submitter: UserUpdateOneInput
-}
-
-input TeamDataUpdateWithoutTeamInput {
-  where: TeamDataWhereUniqueInput!
-  data: TeamDataUpdateWithoutTeamDataInput!
-}
-
 input TeamDataUpsertWithoutOwnerInput {
   where: TeamDataWhereUniqueInput!
   update: TeamDataUpdateWithoutOwnerDataInput!
   create: TeamDataCreateWithoutOwnerInput!
 }
 
-input TeamDataUpsertWithoutTeamInput {
-  where: TeamDataWhereUniqueInput!
-  update: TeamDataUpdateWithoutTeamDataInput!
-  create: TeamDataCreateWithoutTeamInput!
-}
-
 input TeamDataWhereInput {
   AND: [TeamDataWhereInput!]
   OR: [TeamDataWhereInput!]
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
   value: String
   value_not: String
   value_in: [String!]
@@ -2586,19 +2466,26 @@ input TeamDataWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  team: TeamWhereInput
-  field: TeamFieldWhereInput
   owner: ScoutTeamWhereInput
   submitter: UserWhereInput
 }
 
 input TeamDataWhereUniqueInput {
-  id: ID
+  name: String
 }
 
 type TeamEdge {
   node: Team!
   cursor: String!
+}
+
+type TeamField {
+  name: String!
+  type: FieldType!
+  private: Boolean
+  submitter(where: UserWhereInput): User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type TeamFieldConnection {
@@ -2609,27 +2496,14 @@ type TeamFieldConnection {
 
 input TeamFieldCreateInput {
   name: String!
-  type: String!
-  official: Boolean!
-  owner: ScoutTeamCreateOneWithoutTeamFieldsInput
+  type: FieldType!
+  private: Boolean
   submitter: UserCreateOneInput!
 }
 
-input TeamFieldCreateManyWithoutOwnerInput {
-  create: [TeamFieldCreateWithoutOwnerInput!]
+input TeamFieldCreateManyInput {
+  create: [TeamFieldCreateInput!]
   connect: [TeamFieldWhereUniqueInput!]
-}
-
-input TeamFieldCreateOneInput {
-  create: TeamFieldCreateInput
-  connect: TeamFieldWhereUniqueInput
-}
-
-input TeamFieldCreateWithoutOwnerInput {
-  name: String!
-  type: String!
-  official: Boolean!
-  submitter: UserCreateOneInput!
 }
 
 type TeamFieldEdge {
@@ -2638,25 +2512,24 @@ type TeamFieldEdge {
 }
 
 enum TeamFieldOrderByInput {
-  id_ASC
-  id_DESC
   name_ASC
   name_DESC
   type_ASC
   type_DESC
-  official_ASC
-  official_DESC
+  private_ASC
+  private_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  id_ASC
+  id_DESC
 }
 
 type TeamFieldPreviousValues {
-  id: ID!
   name: String!
-  type: String!
-  official: Boolean!
+  type: FieldType!
+  private: Boolean
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2680,63 +2553,21 @@ input TeamFieldSubscriptionWhereInput {
 
 input TeamFieldUpdateInput {
   name: String
-  type: String
-  official: Boolean
-  owner: ScoutTeamUpdateOneWithoutTeamFieldsInput
+  type: FieldType
+  private: Boolean
   submitter: UserUpdateOneInput
 }
 
-input TeamFieldUpdateManyWithoutOwnerInput {
-  create: [TeamFieldCreateWithoutOwnerInput!]
+input TeamFieldUpdateManyInput {
+  create: [TeamFieldCreateInput!]
   connect: [TeamFieldWhereUniqueInput!]
   disconnect: [TeamFieldWhereUniqueInput!]
   delete: [TeamFieldWhereUniqueInput!]
-  update: [TeamFieldUpdateWithoutOwnerInput!]
-  upsert: [TeamFieldUpsertWithoutOwnerInput!]
-}
-
-input TeamFieldUpdateOneInput {
-  create: TeamFieldCreateInput
-  connect: TeamFieldWhereUniqueInput
-  disconnect: TeamFieldWhereUniqueInput
-  delete: TeamFieldWhereUniqueInput
-}
-
-input TeamFieldUpdateWithoutOwnerDataInput {
-  name: String
-  type: String
-  official: Boolean
-  submitter: UserUpdateOneInput
-}
-
-input TeamFieldUpdateWithoutOwnerInput {
-  where: TeamFieldWhereUniqueInput!
-  data: TeamFieldUpdateWithoutOwnerDataInput!
-}
-
-input TeamFieldUpsertWithoutOwnerInput {
-  where: TeamFieldWhereUniqueInput!
-  update: TeamFieldUpdateWithoutOwnerDataInput!
-  create: TeamFieldCreateWithoutOwnerInput!
 }
 
 input TeamFieldWhereInput {
   AND: [TeamFieldWhereInput!]
   OR: [TeamFieldWhereInput!]
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
   name: String
   name_not: String
   name_in: [String!]
@@ -2751,22 +2582,12 @@ input TeamFieldWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  type: String
-  type_not: String
-  type_in: [String!]
-  type_not_in: [String!]
-  type_lt: String
-  type_lte: String
-  type_gt: String
-  type_gte: String
-  type_contains: String
-  type_not_contains: String
-  type_starts_with: String
-  type_not_starts_with: String
-  type_ends_with: String
-  type_not_ends_with: String
-  official: Boolean
-  official_not: Boolean
+  type: FieldType
+  type_not: FieldType
+  type_in: [FieldType!]
+  type_not_in: [FieldType!]
+  private: Boolean
+  private_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -2783,12 +2604,11 @@ input TeamFieldWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  owner: ScoutTeamWhereInput
   submitter: UserWhereInput
 }
 
 input TeamFieldWhereUniqueInput {
-  id: ID
+  name: String
 }
 
 enum TeamOrderByInput {
@@ -2827,7 +2647,7 @@ input TeamUpdateInput {
   number: Int
   competitions: CompetitionUpdateManyWithoutTeamsInput
   matches: MatchPlacementUpdateManyWithoutTeamInput
-  teamData: TeamDataUpdateManyWithoutTeamInput
+  teamData: TeamDataUpdateManyInput
   matchData: MatchDataUpdateManyWithoutTeamInput
 }
 
@@ -2865,19 +2685,10 @@ input TeamUpdateOneWithoutMatchesInput {
   upsert: TeamUpsertWithoutMatchesInput
 }
 
-input TeamUpdateOneWithoutTeamDataInput {
-  create: TeamCreateWithoutTeamDataInput
-  connect: TeamWhereUniqueInput
-  disconnect: TeamWhereUniqueInput
-  delete: TeamWhereUniqueInput
-  update: TeamUpdateWithoutTeamDataInput
-  upsert: TeamUpsertWithoutTeamDataInput
-}
-
 input TeamUpdateWithoutCompetitionsDataInput {
   number: Int
   matches: MatchPlacementUpdateManyWithoutTeamInput
-  teamData: TeamDataUpdateManyWithoutTeamInput
+  teamData: TeamDataUpdateManyInput
   matchData: MatchDataUpdateManyWithoutTeamInput
 }
 
@@ -2890,7 +2701,7 @@ input TeamUpdateWithoutMatchDataDataInput {
   number: Int
   competitions: CompetitionUpdateManyWithoutTeamsInput
   matches: MatchPlacementUpdateManyWithoutTeamInput
-  teamData: TeamDataUpdateManyWithoutTeamInput
+  teamData: TeamDataUpdateManyInput
 }
 
 input TeamUpdateWithoutMatchDataInput {
@@ -2901,25 +2712,13 @@ input TeamUpdateWithoutMatchDataInput {
 input TeamUpdateWithoutMatchesDataInput {
   number: Int
   competitions: CompetitionUpdateManyWithoutTeamsInput
-  teamData: TeamDataUpdateManyWithoutTeamInput
+  teamData: TeamDataUpdateManyInput
   matchData: MatchDataUpdateManyWithoutTeamInput
 }
 
 input TeamUpdateWithoutMatchesInput {
   where: TeamWhereUniqueInput!
   data: TeamUpdateWithoutMatchesDataInput!
-}
-
-input TeamUpdateWithoutTeamDataDataInput {
-  number: Int
-  competitions: CompetitionUpdateManyWithoutTeamsInput
-  matches: MatchPlacementUpdateManyWithoutTeamInput
-  matchData: MatchDataUpdateManyWithoutTeamInput
-}
-
-input TeamUpdateWithoutTeamDataInput {
-  where: TeamWhereUniqueInput!
-  data: TeamUpdateWithoutTeamDataDataInput!
 }
 
 input TeamUpsertWithoutCompetitionsInput {
@@ -2938,12 +2737,6 @@ input TeamUpsertWithoutMatchesInput {
   where: TeamWhereUniqueInput!
   update: TeamUpdateWithoutMatchesDataInput!
   create: TeamCreateWithoutMatchesInput!
-}
-
-input TeamUpsertWithoutTeamDataInput {
-  where: TeamWhereUniqueInput!
-  update: TeamUpdateWithoutTeamDataDataInput!
-  create: TeamCreateWithoutTeamDataInput!
 }
 
 input TeamWhereInput {

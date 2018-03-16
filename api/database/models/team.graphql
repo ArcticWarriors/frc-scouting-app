@@ -1,25 +1,36 @@
 type TeamField {
-  id: ID! @unique
-  name: String!
-  type: String!
+  #id: ID! @unique
+  #name: String!
+  # This should be a compound key, current format: ":[o<teamOwnerNumber>:]n<name>:" (not actively using owner)
+  name: String! @unique
+  type: FieldType!
   # Did this come from the API?
-  official: Boolean!
+  # official: Boolean! - Use TBA user ID instead!
+  
   # If not set, this is a public field
-  owner: ScoutTeam
+  #owner: ScoutTeam
+  private: Boolean
+  
   submitter: User!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
 type TeamData {
-  id: ID! @unique
-  team: Team!
-  field: TeamField!
+  #id: ID! @unique
+  #team: Team!
+  #field: TeamField!
+  # This should be a compound key, current format: ":[o<teamOwnerNumber>:]t<teamNumber>:n<fieldName>:" (not actively using owner)
+  name: String! @unique
   value: String!
-  # Required as the field could be public, but the data is still associated with a specific team 
-  owner: ScoutTeam!
-  submitter: User!
+  
+  # Required as the field could be public, but the data is still associated with a specific team
+  #owner: ScoutTeam!
+  owner: ScoutTeam
   private: Boolean
+  
+  # Required as the field could be public, but the data is still associated with a specific team 
+  submitter: User!
   createdAt: DateTime!
   updatedAt: DateTime!
 }

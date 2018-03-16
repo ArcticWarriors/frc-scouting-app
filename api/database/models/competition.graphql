@@ -5,13 +5,15 @@ type Game {
 
 type Competition {
   # The `id` field should be removed once multiple field unique constraints land, making game + code unique 
-  # GitHub: graphcool/graphcool#171 graphcool/graphcool#1160:issuecomment-345373277
-  id: ID! @unique
-  game: Game!
-  code: String!
+  # GitHub: graphcool/prisma#171 graphcool/prisma#1160:issuecomment-345373277
+  #id: ID! @unique
+  #game: Game!
+  #code: String!
+  # Should be a compund key, current format: ":g<gameYear>:c<regionalCode>:"
+  code: String! @unique
   name: String
   # Start/end dates should be a straight date if that lands
-  # GitHub: graphcool/graphcool/#273 graphcool/graphcool/#91
+  # GitHub: graphcool/prisma#273 graphcool/prisma#91
   startDate: DateTime
   endDate: DateTime
   location: Location
@@ -19,14 +21,24 @@ type Competition {
   teams: [Team!]!
 }
 
+enum Alliance {
+  RED,
+  BLUE
+}
+
 type MatchField {
-  id: ID! @unique
-  name: String!
-  type: String!
-  # Did this come from the API?
-  official: Boolean!
+  #id: ID! @unique
+  #name: String!
   # If not set, this is a public field
-  owner: ScoutTeam
+  # This should be a compound key, current format: ":[o<teamOwnerNumber>:]n<name>:" (not actively using owner)
+  name: String! @unique
+  type: FieldType!
+  # Did this come from the API?
+  #official: Boolean! - Use TBA user ID instead!
+  
+  #owner: ScoutTeam
+  private: Boolean
+  
   submitter: User!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -34,20 +46,24 @@ type MatchField {
 
 type MatchData {
   id: ID! @unique
+  # These should probably be union fields once Prisma supports that graphcool/prisma#165
+  team: Team
+  alliance: Alliance
   match: Match!
+  
   field: MatchField!
   value: String!
-  # If not set, this is not team-specific (ie, alliance data from the API)
-  team: Team
+  
   # Required as the field could be public, but the data is still associated with a specific team
   owner: ScoutTeam!
-  submitter: User!
   private: Boolean
+  
+  submitter: User!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
-enum CompetitionLevel {
+enum MatchLevel {
   # Practice
   PR,
   # Qualification
@@ -62,29 +78,22 @@ enum CompetitionLevel {
   F
 }
 
-enum MatchLocation {
-  RED1,
-  RED2,
-  RED3,
-  BLUE1,
-  BLUE2,
-  BLUE3
-}
-
 type MatchPlacement {
   id: ID! @unique
-  team: Team!
   match: Match!
-  location: MatchLocation
+  team: Team!
+  alliance: Alliance!
 }
 
 type Match {
   # The `id` field should be removed once multiple field unique constraints land, making competition + number + level unique 
-  # GitHub: graphcool/graphcool#171 graphcool/graphcool#1160:issuecomment-345373277
-  id: ID! @unique
-  competition: Competition!
-  number: Int!
-  level: CompetitionLevel!
+  # GitHub: graphcool/prisma#171 graphcool/prisma#1160:issuecomment-345373277
+  #id: ID! @unique
+  #competition: Competition!
+  #level: MatchLevel!
+  #number: Int!
+  # Should be a compound key, current format: ":g<gameYear>:c<regionalCode>:l<competitionLevel>:n<machNumber>:"
+  name: String! @unique
   teams: [MatchPlacement!]!
   matchData: [MatchData!]!
 }

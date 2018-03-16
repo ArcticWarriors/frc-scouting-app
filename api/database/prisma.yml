@@ -10,7 +10,7 @@ secret: ${env:PRISMA_SECRET}
 
 # the file path pointing to your data model
 datamodel:
-  - models/_generics.graphql
+  - models/core.graphql
   - models/scout.graphql
   - models/team.graphql
   - models/competition.graphql
